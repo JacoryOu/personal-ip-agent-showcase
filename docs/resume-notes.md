@@ -1,222 +1,147 @@
-# Resume notes (AI Agent application development engineer)
+# 简历材料说明（AI Agent 应用开发工程师）
 
-This file extracts material for a resume. It deliberately separates
-**what the code proves** from **what only you can confirm**. Nothing here
-claims users, revenue, latency improvements, or model-training experience
-that the repository cannot evidence.
+> 中文（默认） | [English](resume-notes.en.md)
 
-## 1. Project background (code-verified framing)
+本文件用于提炼简历可用材料，严格区分**代码可证明的部分**与**只有本人才能确认的部分**。
+仓库中不存在用户量、营收、延迟优化等证据，因此本文不做此类声明。
 
-A personal content-production engine that repeatedly runs a user's own writing
-"DNA" through a fixed multi-stage LLM pipeline:
+## 1. 项目背景（代码可证实的定位）
 
-`topic -> outline A/B -> full draft -> user edit -> diff-based Thinking-DNA
-extraction -> profile evolution -> multi-platform formatting`
+一个个人内容生产引擎：把用户自己的写作"DNA"反复投入一条固定的多阶段 LLM 流水线。
 
-The value proposition the code implements is *reusability of personal writing
-style across many articles*, plus a governance layer (permission gates, prompt
-separation, code-style and doc-coverage CI gates) that keeps the pipeline
-maintainable.
+`选题 → A/B 发散大纲 → 全文初稿 → 人工修改 → 基于差异的思维 DNA 提取 → 画像演化 → 多平台排版`
 
-Project type facts, taken from the code:
+代码所实现的价值点：
 
-- Monorepo: FastAPI backend + Vue 3 / TypeScript frontend + Python `skills/`.
-- Headless engine (`backend/app/engine/cognitive_engine.py`) driven by a thin API
-  layer, so the same flow can be called from API, CLI or tests.
-- Storage: SQLModel over SQLite by default, PostgreSQL-compatible.
+- **写作风格的可复用性**：同一套 DNA 跨多篇文章复用。
+- **治理层**：权限门禁、Prompt 与代码分离、代码风格与文档覆盖的 CI 强制检查，保证流水线可维护。
 
-## 2. Contribution boundary
+代码可证实的项目形态：
 
-### Confirmed by you (2026-10-15)
+- 单仓多模块：FastAPI 后端 + Vue 3 / TypeScript 前端 + Python `skills/`。
+- 无头引擎 `backend/app/engine/cognitive_engine.py`，由薄 API 层驱动，同一流程可从 API、CLI 或测试调用。
+- 存储：SQLModel，默认 SQLite，兼容 PostgreSQL。
 
-- **Requirements analysis and system / architecture design: you.**
-- **Code review: you** — you review the implementation code produced inside this
-  repository (which includes AI-assisted code).
-- **Functional testing of the overall system: you** — you run and judge the
-  end-to-end behaviour, including the real-model demo run documented in
-  `docs/demo.md`.
-- **Project feature and rule management: you** — you own the feature inventory,
-  the coding standard (`docs/architecture/09_Coding_Standards.md`), the sandbox /
-  permission model documentation, and the doc-coverage / code-style gate rules
-  that encode them.
-- **Solo project.** You are the only human owner; the implementation code was
-  produced with AI assistance and reviewed by you.
+## 2. 个人贡献边界
 
-Your role is therefore **requirements + system / architecture design, feature and
-engineering-rule management, code review, and end-to-end functional
-verification** — not "I wrote every module".
+### 已由本人确认（2026-10-15）
 
-Wording rules that follow from that:
+- **需求分析与系统 / 架构设计：本人。**
+- **Code Review：本人** —— 审查本仓库内的实现代码（含 AI 辅助产出部分）。
+- **整体功能测试：本人** —— 运行并判断端到端行为，包括 `docs/demo.md` 记录的真实模型演示。
+- **项目功能与规则管理：本人** —— 负责功能清单、编码标准（`docs/architecture/09_Coding_Standards.md`）、沙盒 / 权限模型文档，以及将上述规则落为强制门禁的文档覆盖 / 代码风格规则。
+- **个人项目。** 本人是唯一的人类负责人；实现代码由 AI 辅助产出，本人负责审查。
 
-- Use verbs like *designed / defined / specified / owned / reviewed / verified*.
-- Avoid verbs like *implemented / developed / built* for modules you did not write
-  yourself.
-- Do not delete the technical bullets (2-5) because they are the strongest
-  evidence you can defend: reviewing and verifying a mechanism is real work, and
-  each one is traceable to a code path.
+因此本人角色准确表述为：**需求分析 + 系统 / 架构设计 + 功能与工程规则管理 + Code Review + 端到端功能验证**，而非"我写了每一个模块"。
 
-### Still to be confirmed by you
+由此产生的措辞规则：
 
-| Area | Status |
+- 使用 designed / defined / specified / owned / reviewed / verified 等动词。
+- 对本人未亲自编写的模块，避免使用 implemented / developed / built。
+- 不要删除下面第 3 节的第 2—5 条技术要点：审查并验证一个机制是真实工作，且每一条都能追溯到具体代码路径。
+
+### 待本人确认
+
+| 范围 | 状态 |
 | --- | --- |
-| Backend implementation authorship (agents, services, DB, auth, skill engine) | to be confirmed by you |
-| Frontend implementation authorship (Vue views/services/router) | to be confirmed by you |
-| Test authoring vs. reviewing / maintaining existing tests | to be confirmed by you |
-| Release / deployment / CI operations | to be confirmed by you |
-| Feature inventory / coding standard / doc & style gate ownership | **confirmed: you** |
-| Solo project or team project | **confirmed: solo project** |
+| 后端实现代码作者身份（agents / services / DB / auth / skill engine） | 待本人确认 |
+| 前端实现代码作者身份（Vue views / services / router） | 待本人确认 |
+| 测试代码是本人编写，还是仅审查 / 维护既有测试 | 待本人确认 |
+| 发布 / 部署 / CI 运维 | 待本人确认 |
+| 功能清单 / 编码标准 / 文档与风格门禁的所有权 | **已确认：本人** |
+| 个人项目还是团队项目 | **已确认：个人项目** |
 
-AI-assisted and third-party split (safe to state):
+AI 辅助与第三方组件边界（可直接对外表述）：
 
-- AI assistance: an AI coding agent (`codex` commits) contributed code and
-  documentation inside this repository; you performed the code review on it.
-- Reference / framework conventions: SQLModel CRUD layout, FastAPI router layout,
-  pytest fixtures follow public framework documentation. No third-party source
-  repository was vendored (see `PROVENANCE.md`).
-- Third-party components (not your work): FastAPI, SQLModel/SQLAlchemy,
-  Pydantic, Vue, Vite, Tailwind, Playwright, trafilatura, `openai` SDK, OS-level
-  Windows APIs via `ctypes`.
-## 3. Key technical problems and how they were solved
+- AI 辅助：AI 编码 Agent（`codex` 提交）在仓库内产出了代码与文档，本人对其做 Code Review。
+- 参考与框架惯例：SQLModel CRUD 结构、FastAPI 路由结构、pytest fixture 遵循公开框架文档；未内嵌第三方源码仓库（见 `PROVENANCE.md`）。
+- 第三方组件（非本人工作）：FastAPI、SQLModel/SQLAlchemy、Pydantic、Vue、Vite、Tailwind、Playwright、trafilatura、`openai` SDK、通过 `ctypes` 调用的 Windows 系统 API。
 
-These are all traceable to code; pick the ones you can defend in an interview.
+## 3. 关键技术难点与解决方式
 
-1. **Keeping agent reads physically read-only instead of "please don't write".**
-   - Problem: an agent needs profile / DNA / memory context, but that same path
-     also archives drafts and evolves DNA, which must write.
-   - Solution: a second, independent engine in `backend/app/core/db.py`. SQLite
-     connections use `sqlite:///file:<abs>?mode=ro&uri=true` plus
-     `PRAGMA query_only=ON` on every connect; PostgreSQL runs
-     `SET SESSION CHARACTERISTICS AS TRANSACTION READ ONLY` and
-     `default_transaction_read_only = on`. Unsupported backends and
-     `:memory:` fail closed with `UnsupportedReadOnlyBackendError`.
-   - Scope honesty: read-only covers only the Outline/Draft input-context
-     assembly. Draft archiving and DNA/profile evolution stay writable by
-     design. Verified by `tests/test_agent_db_readonly.py`, which proves a write
-     raises at the driver, not by convention.
+以下每条都可追溯到代码，面试时按自身可辩护的范围选取。
 
-2. **Not paying for an LLM call that cannot learn anything.**
-   - `backend/app/engine/agents/diff_agent.py` compares the AI draft with the
-     user's final text and aborts *before* the model call when the texts are
-     identical and no viewpoint judgments were supplied.
-   - This is a cost/latency guard implemented in Python, not as a prompt
-     instruction.
+1. **让 Agent 的读取在物理上只读，而不是"请你别写"。**
+   - 问题：Agent 需要画像 / DNA / 记忆上下文，但同一条链路还要归档初稿、演化 DNA，这部分必须可写。
+   - 做法：`backend/app/core/db.py` 中构建第二个独立引擎。SQLite 连接使用 `sqlite:///file:<abs>?mode=ro&uri=true`，并在每次 connect 时 `PRAGMA query_only=ON`；PostgreSQL 执行 `SET SESSION CHARACTERISTICS AS TRANSACTION READ ONLY` 与 `default_transaction_read_only = on`。不支持的后端与 `:memory:` 直接以 `UnsupportedReadOnlyBackendError` 失败关闭。
+   - 诚实的范围：只读仅覆盖 Outline / Draft 的输入上下文装配；初稿归档与 DNA / 画像演化按设计保持可写。`tests/test_agent_db_readonly.py` 证明写入在驱动层失败，而非依赖约定。
 
-3. **Style drift / "AI filler" that prompts alone did not fix.**
-   - `backend/app/utils/lexical_filter.py` performs RegEx-based removal of
-     filler and replacement patterns. Both `draft_agent.py` and `diff_agent.py`
-     call it in code, so stripping does not depend on model compliance.
-   - The "AI-speak" problem was addressed by deterministic post-processing
-     rather than by asking the model to behave.
+2. **不为"学不到东西"的 LLM 调用付费。**
+   - `backend/app/engine/agents/diff_agent.py` 会比较 AI 初稿与用户终稿，当文本完全相同且未提供观点判断时，在**模型调用之前**中止。
+   - 这是用 Python 实现的成本 / 延迟守卫，而不是 prompt 指令。
 
-4. **Hybrid retrieval without a vector database.**
-   - `backend/app/services/memory_retrieval.py` and
-     `memory_dna_retrieval.py` rank stories / DNA traits by
-     `0.5 * lexical + 0.5 * cosine(embedding) + confidence * 0.1`.
-   - Honest limitation: no reranker, no vector store, no retrieval metric
-     evaluation. See `docs/evaluation.md`.
+3. **Prompt 无法解决的"AI 腔"与风格漂移。**
+   - `backend/app/utils/lexical_filter.py` 以 RegEx 移除填充词与替换模式。
+   - `draft_agent.py` 与 `diff_agent.py` 都在代码中调用它，因此过滤不依赖模型是否"听话"。
 
-5. **Prompt governance as a build gate.**
-   - All prompt text lives in `backend/app/engine/prompts/`.
-   - `scripts/check_code_style.py` blocks prompt-like string literals in Python
-     outside that directory, and enforces file-size caps against a
-     baseline that may only ever shrink. This turns a convention into a CI gate.
+4. **不引入向量库的混合检索。**
+   - `backend/app/services/memory_retrieval.py` 与 `memory_dna_retrieval.py` 以
+     `0.5 * 词法 + 0.5 * 余弦(embedding) + 置信度 * 0.1` 对故事 / DNA 特征排序。
+   - 诚实的限制：无重排、无向量库、无检索指标评测，见 `docs/evaluation.md`。
 
-6. **SSRF protection on any user-supplied URL.**
-   - `backend/app/core/net_guard.py` validates scheme / DNS resolution /
-     private and reserved address ranges before the crawler or image service
-     fetches a URL. Covered by `tests/test_net_guard*.py`,
-     `tests/test_settings_ssrf.py`.
+5. **把 Prompt 治理做成构建门禁。**
+   - 所有 prompt 文本位于 `backend/app/engine/prompts/`。
+   - `scripts/check_code_style.py` 阻断该目录之外的 prompt 字符串字面量，并以"只允许下降"的基线强制文件体积上限。把约定变成了 CI 门禁。
 
-7. **Refusing to pretend a sandbox exists.**
-   - `backend/app/core/skill_engine/restricted_token.py` really calls
-     `CreateRestrictedToken(DISABLE_MAX_PRIVILEGE)` and launches the child with
-     `CreateProcessAsUserW`.
-   - `SandboxExecutionResult` reports `requested_runner_mode`, the
-     actually-applied `runner_mode`, `sandbox_enforced`, and `warnings`.
-   - If the restricted token cannot be created, the runner **fails closed**
-     rather than executing the skill as a plain subprocess. `wsb` mode is
-     rejected outright; `WindowsSandbox.exe` is never launched.
-   - Not implemented and must not be claimed: AppContainer, filesystem ACL
-     isolation, network isolation, registry / clipboard / COM isolation, child
-     job-object policy, `SKILL.md` `permissions` enforcement.
+6. **对用户提供的 URL 做 SSRF 防护。**
+   - `backend/app/core/net_guard.py` 在采集器或图片服务抓取前校验协议 / DNS 解析 / 内网与保留地址段。
+   - 覆盖于 `tests/test_net_guard*.py`、`tests/test_settings_ssrf.py`。
 
-8. **Credential handling.**
-   - API credentials are encrypted at rest (`backend/app/core/crypto/`) and
-     never returned in plaintext; error contracts are covered by
-     `tests/test_security_*.py` and `tests/test_error_contract.py`.
+7. **拒绝假装沙盒存在。**
+   - `backend/app/core/skill_engine/restricted_token.py` 真实调用
+     `CreateRestrictedToken(DISABLE_MAX_PRIVILEGE)`，并以 `CreateProcessAsUserW` 启动子进程。
+   - `SandboxExecutionResult` 报告 `requested_runner_mode`、实际生效的 `runner_mode`、`sandbox_enforced` 与 `warnings`。
+   - 受限令牌创建失败时**失败关闭**，不会降级为普通子进程执行；`wsb` 模式直接拒绝，绝不启动 `WindowsSandbox.exe`。
+   - 未实现、不可声明：AppContainer、文件系统 ACL 隔离、网络隔离、注册表 / 剪贴板 / COM 隔离、子进程 job object 策略、`SKILL.md` `permissions` 强制执行。
 
-## 4. Verifiable results (state them exactly like this)
+8. **凭据处理。**
+   - API 凭据静态加密存储（`backend/app/core/crypto/`），配置示例仅保留变量名与占位值。
 
-- Local test suite, 2026-10-15, single process, no CI:
-  **18 failed, 992 passed, 3 skipped, 85 warnings**.
-  - This is a **mock-heavy, local, SQLite-default** run. It proves the harness
-    and the contracts work. It is not a statement about model quality,
-    production readiness, or real-user behaviour.
-  - 18 failures are honest defects, three of them one-line import bugs
-    (`clean_title_text` in the multi-distributor formatters, `CognitiveTrait` in
-    `memory_conflicts.py`, `status` in `draft_generation.py`) plus one
-    sys.path issue in `test_api_auth_surface.py`. Details in
-    `docs/evaluation.md`.
-- Rule-based viral-rubric benchmark against 43 human-labeled samples
-  (code thresholds: MAE <= 0.8, exact match >= 0.60).
-  - Caveat you must understand before claiming it: it measures whether the
-    deterministic rubric reproduces human labels. It says nothing about LLM
-    output quality, and the provenance of those 43 labels is unconfirmed.
+## 4. 可验证结果
 
-Do **not** claim: performance improvement, cost reduction percentage, user
-count, published-post count, hours saved, or any production metric. There is
-no evidence for any of these in the repository.
+真实模型端到端运行（2026-10-15）：
 
-## 5. Resume bullet candidates (pick 3-5)
+- 合成选题经由真实模型完成：选题 → 大纲 A/B → 选择大纲 B → 初稿（1301 字）→ 归档 → `feedback/evolve` → 持久化 DNA 特征（`core_value`，confidence 1.5，status active）。
+- 使用独立演示数据库 `demo-data/job-demo.db`，未读写真实业务数据库。
+- 截图：`docs/images/01-topic-input.png`、`02-divergent-outlines.png`、`03-draft-generated.png`。
+- 边界：这是**功能演示**，不是质量或性能评测。人工修改全文 → `diff_agent` 双版本对比 → DNA 提取这条路径**尚未在浏览器真实验证**，仅由 Mock 测试覆盖。
 
-Choose the ones matching what you can defend. Each is grounded in code, and
-bullets 1-4 are written from the **requirement / design + review + verification**
-angle confirmed in section 2 — reword them to "implemented" only for the parts
-you confirm you wrote yourself.
+测试现状（如实记录，不粉饰）：
 
-1. **(role-fit) Designed the requirements, architecture and engineering rules for a FastAPI + Vue 3 personal content engine that runs a user's extracted writing "DNA" through a fixed four-stage LLM pipeline (divergent outline A/B -> draft -> user edit -> diff-based DNA extraction), with the model gateway and all prompts separated so roles, models and prompt versions are independently configurable and testable.
-2. Reviewed and verified driver-level agent-read isolation (SQLite `mode=ro` + `query_only`, PostgreSQL read-only transactions) instead of relying on prompt or code convention, and confirmed the write failure path with regression tests.
-3. Verified that prompt-level style guidance was replaced by a deterministic RegEx lexical filter applied in code on both draft and diff paths, plus a pre-LLM gate that skips the model call when the human edit is byte-identical to the draft.
-4. **(review) Reviewed and boundary-documented a Windows skill sandbox built on real Restricted Tokens (`CreateRestrictedToken` + `CreateProcessAsUserW`) that fails closed and reports the actually-enforced isolation level instead of silently degrading, with explicit documentation of what is still not isolated (no AppContainer, no filesystem ACL or network boundary).
-5. **(rule ownership) Authored the enforcement rules for the repository governance gates (prompt-literal placement, file-size baselines that may only shrink, commit-time documentation-coverage gate) and ran the end-to-end demo path against a real model on an isolated database to confirm the wired pipeline actually executes, not just its unit tests.
+- 导出目录全量测试：`992 passed / 18 failed / 3 skipped`。
+- 18 项失败的真实原因：多平台排版 formatter 与草稿错误处理、观点冲突检测中的缺失 import（`NameError`），以及一项公共端点注册表测试的 `ModuleNotFoundError`。多平台排版当前不可用。
+- 治理检查（源项目）：`59 passed`，文档覆盖与代码风格门禁通过，前端构建成功。
 
-6. Owned feature scope and engineering rules for the repo: kept the
-   code-truth feature inventory, the coding standard (file-size baseline that may
-   only shrink, prompt literals confined to `engine/prompts/`), the sandbox /
-   permission reality doc, and a commit-time documentation-coverage gate, turning
-   conventions into blocking checks instead of review comments.
-7. (role-honest variant, safe with what you confirmed) Owned requirements
-   analysis and system design for the engine, reviewed the AI-assisted
-   implementation code, and validated the full content pipeline (outline ->
-   draft -> feedback -> DNA persistence) with a real model on a dedicated demo
-   database, capturing UI evidence for three core screens.
+## 5. 简历候选表述（选 3—5 条）
 
-Deliberately avoided in these bullets: "autonomous planning agent",
-"multi-agent collaboration", "complete sandbox", "multi-platform auto-publishing",
-"LoRA fine-tuning", and any percentage-improvement or user metric.
+第 1—5 条按第 2 节已确认的"需求 / 设计 + 审查 + 验证"角度撰写；只有当本人确认亲自实现了对应部分时，才可改用"implemented"。
 
-## 6. Statements you should NOT put on a resume today
+1. **（岗位匹配）** 为一套 FastAPI + Vue 3 的个人内容引擎做需求分析、系统架构与工程规则设计：把用户提取出的写作"DNA"投入固定四阶段 LLM 流水线（发散大纲 A/B → 初稿 → 人工修改 → 差异比对 DNA 提取），模型网关与全部 Prompt 分离，使角色、模型与 Prompt 版本可独立配置与测试。
+2. 审查并验证了驱动级 Agent 读取隔离（SQLite `mode=ro` + `query_only`，PostgreSQL 只读事务），而非依赖 Prompt 或代码约定，并用回归测试确认写入失败路径。
+3. 验证了风格控制从 Prompt 提示改为代码级确定性 RegEx 词法过滤（初稿与差异两条链路均生效），以及在人工终稿与初稿逐字节相同时于模型调用前跳过的零差异门控。
+4. **（审查）** 审查并界定了基于真实 Restricted Token（`CreateRestrictedToken` + `CreateProcessAsUserW`）的 Windows Skill 沙盒：失败即关闭，并如实报告实际生效的隔离级别；同时明确记录尚未隔离的部分（无 AppContainer、无文件系统 ACL 与网络边界）。
+5. **（规则所有权）** 制定并落地了仓库治理门禁的执行规则（Prompt 字面量位置约束、体积基线只降不升、提交时文档覆盖门禁），并在独立演示数据库上以真实模型跑通端到端链路，确认流水线确实可执行，而不只是单元测试通过。
+6. 负责本仓库的功能范围与工程规则：维护以代码为准的功能清单、编码标准（体积基线只降不升、Prompt 字面量限定在 `engine/prompts/`）、沙盒 / 权限现状文档与提交期文档覆盖门禁，把约定变成强制检查而不是评审意见。
+7. **（角色诚实版，可直接使用）** 负责该引擎的需求分析与系统设计，审查 AI 辅助产出的实现代码，并在独立演示数据库上用真实模型验证完整内容流水线（大纲 → 初稿 → 反馈 → DNA 持久化），采集三张核心界面证据。
 
-- "Built an autonomous / self-planning Agent" - this is a fixed orchestrated
-  pipeline. There is no planner, router, reflection loop, or LLM function
-  calling, and no inter-agent negotiation.
-- "Fine-tuned a model with LoRA/QLoRA" - not implemented. At most: understands
-  LoRA/QLoRA principles and the basic workflow.
-- "Multi-platform content distribution" - currently only formatting/preview,
-  and it is currently broken by a missing import.
-- "Sandboxed skill execution" without qualification - only a restricted token
-  on Windows; no OS-level file or network isolation.
-- "Improved conversion rate by X%" or any business outcome - unmeasured.
+刻意回避的表述："自主规划 Agent"、"多 Agent 协作"、"完整沙盒"、"多平台自动分发"、"LoRA 微调"，以及任何百分比提升或用户量指标。
 
-## 7. What you still need to supply (three items, in priority order)
+## 6. 目前不应写进简历的说法
 
-1. **Nothing blocking for the design/leadership framing.** Requirements analysis, system / architecture design, feature and engineering-rule management, code review and overall functional testing are all confirmed as yours, and the project is confirmed solo (see section 2). The only genuinely open items are narrower: whether you personally wrote any backend or frontend modules, whether you authored or only reviewed the test code, and whether you handled CI / deployment. Leaving these as "to be confirmed" is honest and costs you little, because the bullets you can defend already do not depend on them.
-2. **Real-run trace, if you want to show it.** One real-model end-to-end run with three UI screenshots now exists (`docs/demo.md`, `docs/images/`). It uses synthetic input on a throwaway SQLite file and is a functional demonstration only, not a quality or performance evaluation.
-3. **Environment and usage reality.** Whether it ever ran against real
-   PostgreSQL, real outbound crawling, or real usage, and whether the 43 rubric
-   labels are yours, a colleague's, or an external source. This determines which
-   environment claims and which benchmark claim you are allowed to make.
+- "构建了自主 / 自我规划 Agent" —— 这是固定编排流水线。没有 planner、router、reflection 循环、LLM function calling，也没有 Agent 间协商。
+- "用 LoRA/QLoRA 微调了模型" —— 未实现。最多只能说了解其原理与基本流程。
+- "多平台内容分发" —— 目前只有排版 / 预览，且因缺失 import 当前不可用。
+- 不加限定地说"Skill 沙盒执行" —— 仅 Windows 受限令牌，无操作系统级文件与网络隔离。
+- "转化率提升 X%" 或任何业务收益 —— 未测。
 
+## 7. 仍需补充的信息（按优先级，最多三项）
 
+1. **个人贡献的窄口径确认。** 后端 / 前端模块是否有本人亲自编写的部分、测试代码是编写还是仅审查、CI / 部署是否由本人负责。这三项不影响以设计 / 审查 / 验证为主线的表述，保持"待确认"是诚实的。
+2. **若需要更强的展示证据。** 目前已有一次真实模型端到端运行与三张界面截图（`docs/demo.md`、`docs/images/`），使用合成输入与一次性 SQLite 文件，属于功能演示；质量与性能评测尚未做。
+3. **环境与数据来源的真实性。** 是否曾在真实 PostgreSQL、真实外网采集环境下运行；评测集中的 43 条评分标签由本人、同事还是外部来源提供。这决定哪些环境声明与基准声明可以写。
 
+## 8. 简历使用建议
 
+- 面向 **AI Agent 应用开发工程师**：优先第 1、7 条作为定位句，配第 2 或第 3 条作为技术深度证据，再配第 5 条体现工程治理能力。
+- 面试展开时，选一条技术要点（建议第 2 条只读隔离或第 4 条沙盒边界）深入讲，因为这两条都能直接打开对应源码文件当场验证，最能体现"审查过、验证过"的分量。
+- 切勿把 18 项失败说成"全部通过"；被问到测试时，如实说明失败集中在缺失 import 的三处及一项注册表测试。

@@ -1,86 +1,77 @@
-# Personal Cognitive IP Engine (showcase copy)
+# 个人认知 IP 引擎（脱敏展示版）
 
-A personal content-production engine that turns a user's writing DNA into a
-repeated AI pipeline:
+> 中文（默认） | [English](README.en.md)
 
-**topic -> two divergent outlines (A/B) -> full draft -> user edits ->
-diff-based Thinking-DNA extraction -> profile evolution -> multi-platform output**
+一个把用户「写作 DNA」变成可重复 AI 内容流水线的个人内容生产引擎：
 
-This is a **desensitized showcase copy**. See `PROVENANCE.md` for what was removed
-and what still needs confirmation.
+**选题 → 两版发散大纲（A/B）→ 完整初稿 → 人工编辑 → 基于差异的思维 DNA 提取 → 画像演化 → 多平台排版**
 
-> Status honesty note: this repository is a local development project. It is
-> **not** deployed to production, has **no** real users, and has **no** measured
-> performance or business metrics. Only test-suite numbers reported in
-> `docs/evaluation.md` are real; everything else is "not measured".
+本仓库是**脱敏展示副本**。删除了什么、还有什么待确认，见 `PROVENANCE.md`。
 
-## What it actually does (code-verified)
+> 状态诚实声明：这是一个本地开发项目，**未部署上线**、**无真实用户**、**没有**任何实测性能或业务指标。本仓库中只有 `docs/evaluation.md` 记录的测试数字是真实的，其余均标为「未测」。
 
-| Capability | Status | Where |
+## 实际功能（代码核实）
+
+| 能力 | 状态 | 代码位置 |
 | --- | --- | --- |
-| Divergent outline generation (A/B) | implemented | `backend/app/engine/agents/outline_agent.py` |
-| Draft generation with persona / DNA / memory context | implemented | `backend/app/engine/agents/draft_agent.py` |
-| Diff-based Thinking-DNA extraction | implemented | `backend/app/engine/agents/diff_agent.py` |
-| Zero-diff baseline gating (skips LLM when nothing changed) | implemented | `diff_agent.py` |
-| Code-based "AI filler" lexical stripping | implemented | `backend/app/utils/lexical_filter.py` |
-| Driver-level read-only DB engine for the agent read path | implemented (partial scope) | `backend/app/core/db.py` |
-| Episodic memory + blueprint + viewpoint-conflict memory | implemented | `backend/app/services/memory_*.py` |
-| Hybrid retrieval (lexical + embedding cosine) for stories/DNA | implemented | `backend/app/services/memory_retrieval.py`, `memory_dna_retrieval.py` |
-| Viral style-fingerprint analysis (rule-based + LLM) | implemented | `backend/app/engine/...viral`, `backend/app/api/viral_analysis.py` |
-| Rule-based rubric benchmark (43 labeled samples) | implemented | `backend/app/engine/rubrics/` |
-| Skill engine with restricted-token sandbox | implemented (partial isolation) | `backend/app/core/skill_engine/` |
-| WeChat / Xiaohongshu / X / short-video formatting | **broken** (NameError) | `skills/content-multi-distributor/scripts/_formatters*.py` |
-| Viewpoint-conflict detection | **broken** (NameError) | `backend/app/services/memory_conflicts.py` |
-| WeChat chat-record import | not found | — |
-| Multi-platform auto-publishing (not just formatting) | not implemented | — |
-| Fine-tuning (LoRA / QLoRA) training | not implemented | — |
+| 发散大纲生成（A/B） | 已实现 | `backend/app/engine/agents/outline_agent.py` |
+| 带画像 / DNA / 记忆上下文的初稿生成 | 已实现 | `backend/app/engine/agents/draft_agent.py` |
+| 基于差异的思维 DNA 提取 | 已实现 | `backend/app/engine/agents/diff_agent.py` |
+| 零差异基线门控（无改动则跳过 LLM 调用） | 已实现 | `diff_agent.py` |
+| 代码级「AI 腔」词法过滤 | 已实现 | `backend/app/utils/lexical_filter.py` |
+| 面向 Agent 读路径的驱动级只读数据库引擎 | 已实现（范围有限） | `backend/app/core/db.py` |
+| 情节记忆 + 蓝图 + 观点冲突记忆 | 已实现 | `backend/app/services/memory_*.py` |
+| 混合检索（词法 + 向量余弦）用于素材 / DNA | 已实现 | `backend/app/services/memory_retrieval.py`、`memory_dna_retrieval.py` |
+| 爆款风格指纹分析（规则 + LLM） | 已实现 | `backend/app/api/viral_analysis.py` |
+| 基于规则的评分基准（43 条人工标注样本） | 已实现 | `backend/app/engine/rubrics/` |
+| 带受限令牌沙盒的 Skill 引擎 | 已实现（隔离有限） | `backend/app/core/skill_engine/` |
+| 微信 / 小红书 / X / 短视频排版 | **有缺陷**（NameError） | `skills/content-multi-distributor/scripts/_formatters*.py` |
+| 观点冲突检测 | **有缺陷**（NameError） | `backend/app/services/memory_conflicts.py` |
+| 微信聊天记录导入 | 未找到实现 | — |
+| 多平台自动发布（非仅排版） | 未实现 | — |
+| LoRA / QLoRA 微调训练 | 未实现 | — |
 
-## Architecture in one picture
+## 架构一览
 
 ```
-Vue 3 frontend
+Vue 3 前端
    |
-FastAPI  (private router requires auth; public router is a whitelist)
+FastAPI（私有路由需鉴权；公开路由为白名单）
    |
-CognitiveEngine (headless facade; fixed orchestration, not an autonomous planner)
-   |-- OutlineAgent  -> ModelGateway (role -> model)
-   |-- DraftAgent    -> ModelGateway + read-only context assembly
-   |-- DiffAgent     -> ModelGateway + writable DNA write-back
-   |-- Viral semantic pipeline
+CognitiveEngine（无头外观层；固定编排，不是自主规划 Agent）
+   |-- OutlineAgent  -> ModelGateway（角色 -> 模型）
+   |-- DraftAgent    -> ModelGateway + 只读上下文装配
+   |-- DiffAgent     -> ModelGateway + 可写 DNA 回写
+   |-- 爆款语义分析流水线
    |
-Services (memory, cognitive profile, style selection, crawler, credentials)
-Core (db + readonly engine, auth, net_guard SSRF, crypto, skill engine)
-Skills (SKILL.md + python scripts executed by the sandbox runner)
+Services（记忆、认知画像、风格选择、爬虫、凭据）
+Core（db + 只读引擎、auth、net_guard SSRF、crypto、skill engine）
+Skills（SKILL.md + 由沙盒执行器运行的 python 脚本）
 ```
 
-See `docs/architecture.md` for the detailed flow.
+详细流程见 [docs/architecture.md](docs/architecture.md)。
 
-## Tech stack
+## 技术栈
 
-- Backend: Python 3.13, FastAPI, SQLModel / SQLAlchemy, Pydantic v2,
-  pydantic-settings, `openai` (AsyncOpenAI, OpenAI-compatible), `cryptography`,
-  `playwright`, `trafilatura`, `qrcode`, `uvicorn`.
-- Frontend: Vue 3 + TypeScript + Vite, Tailwind CSS 4, jszip.
-- Database: SQLite by default (PostgreSQL supported; read-only sessions are
-  enforced at the driver level for both).
-- Tests: pytest + pytest-asyncio (55 test files under `backend/tests` plus 18 root-level `backend/test_*.py` files).
-- Windows-only: the Skill sandbox uses a real Windows Restricted Token via ctypes.
+- 后端：Python 3.13、FastAPI、SQLModel / SQLAlchemy、Pydantic v2、pydantic-settings、`openai`（AsyncOpenAI，OpenAI 兼容）、`cryptography`、`playwright`、`trafilatura`、`qrcode`、`uvicorn`。
+- 前端：Vue 3 + TypeScript + Vite、Tailwind CSS 4、jszip。
+- 数据库：默认 SQLite（支持 PostgreSQL；两者均在驱动层强制只读会话）。
+- 测试：pytest + pytest-asyncio（`backend/tests` 下 55 个测试文件，另有 18 个 `backend/test_*.py`）。
+- 仅 Windows：Skill 沙盒通过 ctypes 使用真实的 Windows 受限令牌。
 
-## Requirements to run
+## 运行条件
 
-- Python >= 3.13, Node >= 20.
-- An OpenAI-compatible API key (`OPENAI_API_KEY`). **The showcase cannot call a
-  real model without your own key.**
-- Windows 10/11 for the restricted-token sandbox; on other platforms the skill
-  runner fails closed (by design).
+- Python >= 3.13，Node >= 20。
+- 需要 OpenAI 兼容 API Key（`OPENAI_API_KEY`）。**没有你自己的 Key，展示副本无法调用真实模型。**
+- 沙盒受限令牌需要 Windows 10/11；其他平台执行器按设计「失败即关闭」。
 
-## Quick start
+## 快速开始
 
 ```powershell
 cd backend
 python -m venv .venv
 .\.venv\Scripts\pip install -e .
-Copy-Item ..\.env.example .env        # then fill in OPENAI_API_KEY
+Copy-Item ..\.env.example .env        # 然后填入 OPENAI_API_KEY
 .\.venv\Scripts\python -m uvicorn app.main:app --reload --port 8000
 ```
 
@@ -90,180 +81,69 @@ npm install
 npm run dev      # http://localhost:5173
 ```
 
-- Swagger: http://localhost:8000/docs
-- Health: http://localhost:8000/api/health (public endpoint)
+- Swagger：http://localhost:8000/docs
+- 健康检查：http://localhost:8000/api/health（公开端点）
 
-Run the tests (no credentials needed):
+运行测试（无需凭据）：
 
 ```powershell
 cd backend
 .\.venv\Scripts\python -m pytest -q
 ```
 
-## Showcase entry points
+## 展示入口
 
-| What to look at | File |
+| 想看什么 | 文件 |
 | --- | --- |
-| Fixed multi-agent pipeline | `backend/app/engine/cognitive_engine.py` |
-| The three agents | `backend/app/engine/agents/*.py` |
-| Model gateway (role -> model, structured output, fallback) | `backend/app/engine/model_gateway.py` |
-| Prompts (kept out of Python for safety) | `backend/app/engine/prompts/` |
-| Lexical filter | `backend/app/utils/lexical_filter.py` |
-| Read-only DB engine | `backend/app/core/db.py` |
-| SSRF guard | `backend/app/core/net_guard.py` |
-| Restricted token sandbox | `backend/app/core/skill_engine/restricted_token.py` |
-| Memory retrieval | `backend/app/services/memory_retrieval.py` |
-| Private/public route boundary | `backend/app/api/auth_boundary.py` |
+| 固定多阶段流水线 | `backend/app/engine/cognitive_engine.py` |
+| 三个核心 Agent | `backend/app/engine/agents/*.py` |
+| 模型网关（角色 -> 模型、结构化输出、回退） | `backend/app/engine/model_gateway.py` |
+| 只读数据库引擎 | `backend/app/core/db.py` |
+| 词法过滤器 | `backend/app/utils/lexical_filter.py` |
+| 沙盒模式透明度 | `backend/app/core/skill_engine/windows_sandbox.py` |
+| 受限令牌 ctypes 绑定 | `backend/app/core/skill_engine/restricted_token.py` |
+| 治理规则 | `AGENTS.md`、`scripts/check_code_style.py`、`scripts/check_doc_coverage.py` |
 
-## Contribution (as confirmed by the project owner)
+## 文档索引
 
-- **Requirements analysis and system / architecture design: yours.**
-- **Code review: yours** (implementation code in this repo is largely AI-assisted).
-- **Functional testing of the overall system: yours**, including the real-model
-  demo run below.
-- **Solo project** — the only human owner; implementation code was
-  AI-assisted and reviewed by you.
+- [架构说明](docs/architecture.md)
+- [演示说明](docs/demo.md)
+- [评测与测试证据](docs/evaluation.md)
+- [简历材料与个人贡献边界](docs/resume-notes.md)
+- [功能状态清单（代码核实）](docs/feature-status.md)
+- [来源与公开权限说明](PROVENANCE.md)
+- 英文副本：[README.en.md](README.en.md)
 
-You also own project feature and rule management: the feature inventory, the
-coding standard, the sandbox / permission documentation, and the doc-coverage /
-code-style gates that enforce them.
+## 真实运行截图
 
-Modules you authored yourself, test authorship and CI / deployment ownership
-are still listed as "to be confirmed" in `docs/resume-notes.md`.
+三张截图来自 2026-10-15 的一次**真实模型**本地运行，输入为合成数据，独立演示数据库。
 
-## Screenshots (real model, synthetic data)
+| 截图 | 页面 | 体现的能力 |
+| --- | --- | --- |
+| ![选题输入](docs/images/01-topic-input.png) | 工作台选题输入 | 选题作为流水线入口，发起真实 `POST /api/outlines/generate` |
+| ![发散大纲](docs/images/02-divergent-outlines.png) | A/B 发散大纲 | `OutlineAgent` 真实模型输出两版结构化大纲，并支持选择 |
+| ![初稿生成](docs/images/03-draft-generated.png) | 初稿编辑器 | `DraftAgent` 真实模型生成 1301 字初稿，含归档 / 排版 / DNA / 观点动作 |
 
-Captured on 2026-10-15 by driving the real browser UI against the real
-backend and a **dedicated demo SQLite database**
-(`demo-data/job-demo.db`, deleted after capture) with an OpenAI-compatible
-model (`deepseek-v4-flash-0731`). No mock, no static mock page, no design
-mock-up. The topic text is synthetic.
+模型：`deepseek-v4-flash-0731`（OpenAI 兼容端点）。完整复现步骤与结果见 [docs/demo.md](docs/demo.md)。
 
-### 1. Topic input — `docs/images/01-topic-input.png`
+## 本人贡献边界（已与本人确认）
 
-- **Input (synthetic):** `AI Agent 工作流的可评估性：如何把重复工作变成可追溯的自动化流程`
-- **Output:** the topic plus demo context are posted to
-  `POST /api/outlines/generate`.
-- **Capability shown:** the Vue workbench is wired to the FastAPI private router
-  (`backend/app/api/outline_generation.py`), and outline generation is a fixed
-  orchestrated step rather than an autonomous planner.
+- 个人项目 / solo project。
+- 本人负责：**需求分析、系统与架构设计、Code Review、整体功能测试、项目功能管理与项目规则管理**。
+- 实现代码主要为 **AI 辅助产出**，不应表述为本人逐行编写全部模块。
+- 详见 [docs/resume-notes.md](docs/resume-notes.md)。
 
-![Topic input](docs/images/01-topic-input.png)
+## 已知限制
 
-### 2. Divergent A/B outlines — `docs/images/02-divergent-outlines.png`
+1. 这是**固定编排工作流**，不是自主规划 Agent：没有 planner、router、reflection、LLM tool calling，也没有 Agent 间协商。
+2. 沙盒隔离**部分实现**：真实受限令牌（`CreateRestrictedToken` + `CreateProcessAsUserW`），但**没有** AppContainer、文件系统 ACL 隔离、网络隔离，不启动 `WindowsSandbox.exe`，不完整执行 `SKILL.md` 的 `permissions` 策略；失败时按设计关闭而非静默降级。
+3. 数据库只读隔离**仅覆盖 Outline / Draft 的输入上下文装配**；初稿归档与 Diff/DNA/画像演化为有意可写。
+4. 多平台排版与观点冲突检测存在已知一行导入缺陷（`NameError`）；测试全量为 `992 passed / 18 failed / 3 skipped`，详见 [docs/evaluation.md](docs/evaluation.md)。
+5. 多平台自动发布、微信聊天记录导入、LoRA/QLoRA 微调**均未实现**。
+6. 检索召回率、答案 / 初稿质量、延迟、成本、用户量、业务收益**全部未测**。
 
-- **Input:** the same synthetic topic.
-- **Output:** two structurally different outlines returned by
-  `OutlineAgent` (`backend/app/engine/agents/outline_agent.py`) from a real model
-  call, with an explicit "选择方案 B / 选定此方向并扩写初稿" decision step.
-- **Capability shown:** divergent ideation + user selection gating the next
-  stage; the outline is a contract object (`outline_schemas.py`) passed into
-  draft generation, not free text.
+## 公开范围与脱敏
 
-![Divergent outlines](docs/images/02-divergent-outlines.png)
-
-### 3. Generated draft — `docs/images/03-draft-generated.png`
-
-- **Input:** outline **B**, selected in step 2.
-- **Output:** a full draft (1301 words in this run) archived through
-  `POST /api/drafts/generate`, shown in the draft editor together with the
-  refinement-diff view, archive action, multi-platform reformat action,
-  Thinking-DNA extraction action and the viewpoint review panel.
-- **Capability shown:** `DraftAgent` assembles persona / DNA / memory context on
-  the driver-level read-only session
-  (`backend/app/core/db.py`, `CognitiveService.get_*_readonly`) while the archive
-  write happens on a separate writable session; code-based lexical stripping
-  (`backend/app/utils/lexical_filter.py`) runs in code, not only in prompts.
-
-![Generated draft](docs/images/03-draft-generated.png)
-
-Not captured (not implemented or not verified in this pass): multi-platform
-distribution, WeChat record import, autonomous tool-planning agent, LoRA/QLoRA
-fine-tuning.
-## Known limitations (stated honestly)
-
-- **Not an autonomous agent.** The pipeline is a fixed orchestration of four
-  stages. There is no planner, no router, no reflection loop, no LLM tool
-  calling, and no inter-agent negotiation.
-- **Not deployed, no real users.** No production environment, no traffic, no
-  business metrics, no measured latency or cost improvement.
-- **Sandbox isolation is partial.** The Windows skill runner uses a real
-  Restricted Token (`CreateRestrictedToken` + `CreateProcessAsUserW`) and fails
-  closed when it cannot. It does *not* provide an AppContainer, filesystem ACL
-  isolation, network isolation, registry/clipboard/COM isolation, or
-  `WindowsSandbox.exe` virtualization, and it does not enforce `SKILL.md`
-  `permissions` metadata.
-- **Read-only DB covers the agent read path only.** Outline/Draft context
-  assembly is physically read-only. Draft archiving and the Diff/DNA evolution
-  flow are intentionally writable.
-- **Two features are currently broken** by an unresolved `NameError`:
-  viewpoint-conflict detection (`backend/app/services/memory_conflicts.py`) and
-  multi-platform distribution formatting
-  (`skills/content-multi-distributor/scripts/_formatters*.py`).
-- **WeChat chat-record import: not found in the repository.** Do not assume it
-  exists.
-- **No multi-platform auto-publishing.** Only local formatting/preview, and that
-  path is currently broken anyway.
-- **No LoRA/QLoRA fine-tuning.** At most, an understanding of the principles.
-
-## Scope of this public copy
-
-This is a **partial, desensitized export**, not a byte-for-byte reproduction of
-the working tree. Its purpose is to let a reviewer read and understand the core
-pipeline, the three agents, the engineering mechanisms described above, and the
-real-run evidence, without exposing anything sensitive.
-
-### What is included
-
-- Backend application code (`backend/app/`): API, services, models, engine and
-  the three agents, core (db / readonly engine, auth, net_guard, crypto, skill
-  engine).
-- Backend tests (`backend/tests/` and `backend/test_*.py`).
-- Frontend source (`frontend/src/`) and its build configuration.
-- `skills/` skill definitions and their scripts.
-- `scripts/` repository governance gates.
-- Documentation: `docs/architecture.md`, `docs/demo.md`, `docs/evaluation.md`,
-  `docs/resume-notes.md`, `docs/feature-status.md`, plus `docs/architecture/`
-  and `docs/design/`.
-- `docs/images/`: three real-run UI screenshots (synthetic input data).
-- `.env.example` with variable names and empty values only.
-
-### What is deliberately excluded
-
-- `.git/` (the original repository history).
-- `.env` and every other real environment file; only the placeholder
-  `.env.example` is shipped.
-- All `*.db`, `*.sqlite`, `*.sqlite3` database files (including the
-  `backend/app.db` that was present in the working tree).
-- All `*.log` files and the original working tree's `logs/` directory.
-- All credentials and secrets stores.
-- All caches: `__pycache__/`, `.pytest_cache/`, `.ruff_cache/`,
-  `.mypy_cache/`, `.vite/`.
-- Virtual environments: `.venv/`, `venv/`.
-- `node_modules/`, `dist/`, and all build output.
-- `backend/data/` (local uploads).
-
-### Known residual scanner hits (not secrets)
-
-A secret-pattern scan over this export reports two categories of hit. Both are
-deliberate and safe:
-
-- `sk-...`-shaped strings inside `backend/tests/test_security_*.py` and
-  `backend/test_windows_sandbox.py`. These are **negative-test fixtures** —
-  fake strings used to prove the redaction / DLP code works. They are not
-  credentials.
-- `C:\Users\admin\vault\...` inside the same test files. Same purpose:
-  synthetic input for the scanner tests.
-
-The image-service host `apihub.agnes-ai.com` appears in
-`backend/app/core/config.py` and the frontend model-settings list. It is a
-public third-party API endpoint that the code allow-lists for image generation.
-It is not a private host and contains no credential.
-
-### Reproduction scope
-
-You can install dependencies and run the test suite from this copy without any
-credentials. To exercise the actual LLM pipeline you must supply your own
-OpenAI-compatible API key via `OPENAI_API_KEY`; this copy ships no key and
-cannot call a real model on its own.
-
+已排除：`.git`、`.env`、真实数据库（`*.db` / `*.sqlite*`）、日志、缓存、`.venv`、`node_modules`、构建产物、`backend/data/`。
+`.env.example` 只保留变量名与空值。演示数据均为合成数据，标注在 `docs/demo.md` 中。
+来源与仍待确认的公开权限项见 `PROVENANCE.md`。**本仓库没有 LICENSE，公开前需自行选择并添加。**

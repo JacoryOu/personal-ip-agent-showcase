@@ -1,46 +1,35 @@
-# Provenance and public-release status
+# 来源与公开状态说明（Provenance）
 
-This directory is a **desensitized showcase copy** of a private working repository.
-It was assembled by file selection only; no business logic was changed.
+> 中文（默认） | [English](PROVENANCE.en.md)
 
-## What was removed on purpose
+本目录是私有工作仓库的**脱敏展示副本**，仅通过文件筛选生成，**未修改任何业务逻辑**。
 
-- `.env`, `app.db`, `.git/`, `.venv/`, `node_modules/`, `__pycache__/`,
-  `screenshots/`, `test_renders/`, `backend/data/`, model caches, logs.
-- Author name / email from `backend/pyproject.toml` (replaced with a placeholder).
-- Documentation folders not needed to explain or reproduce the core loop:
-  `docs/legacy`, `docs/product`, `docs/audit`.
-- `docs/design/*` **is** kept: the repository governance test
-  (`backend/tests/test_doc_coverage.py`) asserts the existence and content of
-  those design documents, so removing them would make the shipped gate
-  un-runnable in this copy.
+## 有意移除的内容
 
-## What still needs your confirmation before publishing
+- `.env`、`app.db`、`.git/`、`.venv/`、`node_modules/`、`__pycache__/`、`screenshots/`、`test_renders/`、`backend/data/`、模型缓存、日志。
+- `backend/pyproject.toml` 中的作者姓名 / 邮箱（已替换为占位值）。
+- 解释核心流程不需要的文档目录：`docs/legacy`、`docs/product`、`docs/audit`。
+- `docs/design/*` **保留**：仓库治理测试（`backend/tests/test_doc_coverage.py`）会断言这些设计文档的存在与内容，删除会导致展示副本中的治理门禁无法运行。
 
-| Item | Where | Note |
+## 公开前仍需确认
+
+| 项目 | 位置 | 说明 |
 | --- | --- | --- |
-| Third-party / reference code | `backend/app/**`, `frontend/src/**` | Mostly first-party, but a few patterns (SQLModel CRUD layout, FastAPI router layout) follow public framework conventions. Not independently audited for license provenance. |
-| Company or client material | none copied | No client documents were copied. If any future file references internal hostnames, remove it before publishing. |
-| Synthetic test data | `backend/tests/test_security_*.py`, `test_materials_and_lineage.py`, `test_live_qr_login.py` | Contains obviously fake credentials, fake internal hostnames and Windows sample paths used to prove redaction/guard behaviour. Do not print their literal values in public material; they exist only as fixtures. `test_live_qr_login.py` and `test_materials_and_lineage.py` still contain name-like strings that must be confirmed as synthetic before publishing. |
-| Rubric benchmark labels | `backend/app/engine/rubrics/data/viral_rubric_benchmark_v1.json` | 43 human-labeled samples. **Author and licensing of the labels are unconfirmed.** Confirm provenance and publication right before publishing. |
-| Screenshot rights | not copied | Original `screenshots/` are excluded. If you want to include them, confirm they contain no personal or client data first. |
-| Skills definitions | `skills/*/SKILL.md` | First-party skill definitions. Confirm whether any embed third-party snippets. |
-| Public-release license | none | No LICENSE file was added. You must choose one (e.g. MIT) before publishing. |
+| 第三方 / 参考代码 | `backend/app/**`、`frontend/src/**` | 主要为自研，但部分结构（如 SQLModel CRUD 布局、FastAPI 路由布局）遵循公开框架惯例，尚未逐项审计许可证来源。 |
+| 公司 / 客户资料 | 未复制 | 未复制任何客户文档；若后续文件引用内部主机名，请在公开前移除。 |
+| 合成测试数据 | `backend/tests/test_security_*.py`、`test_materials_and_lineage.py`、`test_live_qr_login.py` | 含明显虚构的凭据、内部主机名与 Windows 示例路径，用于验证脱敏 / 防护逻辑；公开材料中不要打印其字面值。`test_live_qr_login.py` 与 `test_materials_and_lineage.py` 仍含类似姓名的字符串，公开前需确认为合成数据。 |
+| 评分基准标签 | `backend/app/engine/rubrics/data/viral_rubric_benchmark_v1.json` | 43 条人工标注样本，**作者与授权未确认**，公开前需确认来源与发表权利。 |
+| 截图权利 | 未复制原 `screenshots/` | 本仓库 `docs/images/` 为本次用合成数据真实运行后新采集。 |
+| Skill 定义 | `skills/*/SKILL.md` | 自研 Skill 定义，需确认是否内嵌第三方片段。 |
+| 公开许可证 | 无 | 未添加 LICENSE 文件，公开前需自行选择（例如 MIT）。 |
 
-## Not verified
+## 未验证项
 
-- No claim is made that every line is publishable. A manual review pass is
-  required before any remote publication.
+- 本说明不主张「每一行都可公开」。任何远程发布前仍需人工复核。
 
-## Demo-run additions (2026-10-15)
+## 演示运行补充（2026-10-15）
 
-- `docs/images/01-03*.png` were captured from the running local UI with a real
-  model call on synthetic input. No screenshot contains a credential, a real
-  user record, a client document or a WeChat log.
-- The demo run used a dedicated SQLite file (`demo-data/job-demo.db`) that has
-  been deleted; no real business database was read or written.
-- `docs/demo.md` uses `<repo-root>` placeholders instead of local absolute paths.
-- Residual scanner hits for `sk-…` / `C:\Users\…` inside
-  `backend/tests/test_security_*.py` are **negative-test fixtures**
-  (deliberate fake secrets used to prove the redaction code works), not real
-  credentials.
+- `docs/images/01-03*.png` 来自运行中的本地 UI，使用合成输入 + 真实模型调用采集；不含凭据、真实用户记录、客户文档或微信日志。
+- 演示使用独立 SQLite 文件（`demo-data/job-demo.db`），采集后已删除；未读写任何真实业务数据库。
+- `docs/demo.md` 使用 `<repo-root>` 占位符，不含本地绝对路径。
+- 扫描残留的 `sk-…` / `C:\Users\…` 命中位于 `backend/tests/test_security_*.py`，是**负向测试夹具**（用于验证脱敏代码的虚构字符串），不是真实凭据。

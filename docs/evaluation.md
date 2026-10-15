@@ -1,7 +1,8 @@
-# Evaluation and test evidence
+# 评测与测试证据
 
-All numbers below were produced by running the test suite locally on
-2026-10-15 with the repository virtual environment, single process, no CI.
+> 中文（默认） | [English](evaluation.en.md)
+
+以下所有数字均来自 2026-10-15 在本地以仓库虚拟环境、单进程、无 CI 运行的测试：
 
 ```
 cd backend
@@ -9,80 +10,70 @@ cd backend
 -> 18 failed, 992 passed, 3 skipped, 85 warnings in 66.88s
 ```
 
-The desensitized copy in this directory was re-tested with the same command and
-produced the **same** result as the source repository: `18 failed, 992 passed, 3 skipped` (70.64s).
+本目录中的脱敏副本用同样命令复测，结果与源仓库**一致**：`18 failed, 992 passed, 3 skipped`（70.64s）。
 
-The system interpreter (`python -m pytest`) fails because it lacks
-`pydantic_settings`; that is an environment error and is **not** counted as a
-project test result.
+系统解释器（`python -m pytest`）因缺少 `pydantic_settings` 失败；这是环境错误，**不计入**项目测试结果。
 
-## 1. What kind of testing this is
+## 1. 这些测试属于哪一层
 
-| Layer | What it proves | What it does NOT prove |
+| 层次 | 能证明什么 | **不能**证明什么 |
 | --- | --- | --- |
-| Unit / integration tests (pytest; 55 files under `backend/tests` plus 18 root-level `backend/test_*.py` files) | that the code paths execute and the contracts hold | nothing about a real LLM, real PostgreSQL, real network egress, or real users |
-| Mocked model gateway | prompt assembly, schema parsing, gating, ownership, persistence | model quality, latency, cost, hallucination rate |
-| Real model call | run **once** for the flow in section 6 (no corpus, no quality metrics) | anything about reliability, quality, latency or cost |
-| Real PostgreSQL | **not run in this pass** (default is SQLite) | - |
-| Real multi-user security exercise | **not performed** | - |
+| 单元 / 集成测试（pytest；`backend/tests` 下 55 个文件，另有 18 个 `backend/test_*.py`） | 代码路径可执行、契约成立 | 与真实 LLM、真实 PostgreSQL、真实网络出口、真实用户无关 |
+| Mock 模型网关 | 提示装配、schema 解析、门控、归属、持久化 | 模型质量、延迟、成本、幻觉率 |
+| 真实模型调用 | 本文件第 7 节流程运行**一次**（无语料、无质量指标） | 可靠性、质量、延迟、成本 |
+| 真实 PostgreSQL | **本轮未运行**（默认 SQLite） | — |
+| 真实多用户安全演练 | **未执行** | — |
 
-Most agent tests substitute the model gateway, so they are deterministic and
-fast. Treat "992 passed" as "the harness works", not as "the product works".
+多数 Agent 测试替换了模型网关，因此是确定性的、快速的。请把「992 passed」理解为「骨架可用」，而不是「产品已被验证」。
 
-## 2. Failures (real defects, not environment)
+## 2. 失败项（真实缺陷，非环境问题）
 
-| Test | Count | Root cause |
+| 测试 | 数量 | 根因 |
 | --- | --- | --- |
-| `test_blueprint_creation_and_distribution.py` | 15 | `skills/content-multi-distributor/scripts/_formatters_xhs.py` and `_formatters.py` call `clean_title_text` without importing it from `_content`. Breaks WeChat / Xiaohongshu formatting. |
-| `test_dna_conflict_and_management.py::test_viewpoint_conflict_detection` | 1 | `backend/app/services/memory_conflicts.py:124` annotates a parameter as `CognitiveTrait` without importing it. |
-| `test_api_routes.py::test_generate_draft_error_handling` | 1 | `backend/app/api/draft_generation.py:68` uses `status.HTTP_422_UNPROCESSABLE_CONTENT` but `status` is not imported. Only affects the ValueError failure path. |
-| `tests/test_api_auth_surface.py::test_public_endpoint_registry_matches_application` | 1 | `ModuleNotFoundError: No module named 'scripts'` when pytest runs from `backend/`. This is a sys.path / run-location issue, not a business defect. |
+| `test_blueprint_creation_and_distribution.py` | 15 | `skills/content-multi-distributor/scripts/_formatters_xhs.py` 与 `_formatters.py` 调用 `clean_title_text` 却未从 `_content` 导入。微信 / 小红书排版因此中断。 |
+| `test_dna_conflict_and_management.py::test_viewpoint_conflict_detection` | 1 | `backend/app/services/memory_conflicts.py:124` 使用 `CognitiveTrait` 注解但未导入。 |
+| `test_api_routes.py::test_generate_draft_error_handling` | 1 | `backend/app/api/draft_generation.py:68` 使用 `status.HTTP_422_UNPROCESSABLE_CONTENT`，但未导入 `status`。仅影响 ValueError 失败路径。 |
+| `tests/test_api_auth_surface.py::test_public_endpoint_registry_matches_application` | 1 | pytest 从 `backend/` 运行时 `ModuleNotFoundError: No module named 'scripts'`。属于 sys.path / 运行位置问题，不是业务缺陷。 |
 
-All three business defects are one-line import fixes. They are left in place
-because this pass was documentation-only.
+三个业务缺陷都是一行导入修复。本轮为文档工作，**刻意保留未修**。
 
-## 3. Benchmark with a real dataset
+## 3. 带真实数据集的基准
 
-`backend/app/engine/rubrics/data/viral_rubric_benchmark_v1.json` holds **43
-human-labeled samples**. `backend/app/engine/rubrics/viral_benchmark.py` scores
-the deterministic rubric implementation against those labels using:
+`backend/app/engine/rubrics/data/viral_rubric_benchmark_v1.json` 存放 **43 条人工标注样本**。`backend/app/engine/rubrics/viral_benchmark.py` 用以下指标对确定性规则实现评分：
 
-- within-one-level accuracy
-- mean absolute error (MAE)
-- exact match
+- 误差不超过一级的准确率（within-one-level accuracy）
+- 平均绝对误差（MAE）
+- 精确匹配率（exact match）
 
-Recommended thresholds in the code: MAE <= 0.8, exact match >= 0.60.
+代码中建议阈值：MAE <= 0.8，精确匹配率 >= 0.60。
 
-**Critical caveat**: this measures whether the rule-based rubric reproduces
-human labels. It does **not** measure LLM generation quality, and the reviewer
-must know who produced those 43 labels (unconfirmed - see resume-notes).
+**关键注意**：该基准衡量的是「规则实现能否复现人工标签」，**不衡量 LLM 生成质量**；且这 43 条标签由谁产出尚未确认（见 `docs/resume-notes.md`）。
 
-## 4. Explicitly not measured
+## 4. 明确未测的指标
 
-Do not put any of these on a resume; there is no evidence in this repository:
+以下内容不要写进简历，本仓库没有证据：
 
-- Retrieval recall / precision / MRR / nDCG. The hybrid retriever has no
-  labeled retrieval set.
-- Answer or draft quality scores from human raters.
-- End-to-end latency, time-to-first-token, throughput, token cost.
-- Any "improved X%" or "reduced Y%" claim.
-- User counts, active users, published posts, GMV, hours saved.
-- Real-model reliability, safety or jailbreak rates.
+- 检索召回率 / 准确率 / MRR / nDCG。混合检索器没有带标注的检索集。
+- 人工评分得到的答案或初稿质量分。
+- 端到端延迟、首字时间、吞吐、token 成本。
+- 任何「提升 X%」或「降低 Y%」的说法。
+- 用户量、活跃用户、发布篇数、GMV、节省工时。
+- 真实模型下的可靠性、安全性或越狱率。
 
-## 5. Security regression suites (all currently passing)
+## 5. 安全回归套件（当前均通过）
 
-| Area | Tests |
+| 领域 | 测试 |
 | --- | --- |
-| Read-only DB enforcement | `tests/test_agent_db_readonly.py` |
-| Route auth surface | `tests/test_api_auth_surface.py` (one sys.path failure), `tests/test_auth_and_ownership.py` |
-| SSRF | `tests/test_net_guard.py`, `test_net_guard_image_service.py`, `test_settings_ssrf.py` |
-| Credential encryption | `tests/test_credential_encryption.py`, `test_secret_box.py` |
-| Prompt / secret leakage | `tests/test_security_*.py`, `test_error_contract.py` |
-| Sandbox | `tests/test_restricted_token.py`, `test_sandbox_mode_transparency.py`, `test_sandbox_acl_integration.py`, `test_os_network_boundary.py`, `test_job_object.py`, `test_sandbox_permission_gate.py` |
-| Workflow permissions | `tests/test_workflow_permissions.py`, `test_workflow_permission_gate.py` |
-| Governance gates | `tests/test_code_style.py`, `tests/test_doc_coverage.py` |
+| 只读数据库强制 | `tests/test_agent_db_readonly.py` |
+| 路由鉴权面 | `tests/test_api_auth_surface.py`（一处 sys.path 失败）、`tests/test_auth_and_ownership.py` |
+| SSRF | `tests/test_net_guard.py`、`test_net_guard_image_service.py`、`test_settings_ssrf.py` |
+| 凭据加密 | `tests/test_credential_encryption.py`、`test_secret_box.py` |
+| 提示词 / 密钥泄漏 | `tests/test_security_*.py`、`test_error_contract.py` |
+| 沙盒 | `tests/test_restricted_token.py`、`test_sandbox_mode_transparency.py`、`test_sandbox_acl_integration.py`、`test_os_network_boundary.py`、`test_job_object.py`、`test_sandbox_permission_gate.py` |
+| 工作流权限 | `tests/test_workflow_permissions.py`、`test_workflow_permission_gate.py` |
+| 治理门禁 | `tests/test_code_style.py`、`tests/test_doc_coverage.py` |
 
-## 6. Reproducing the governance gates
+## 6. 复现治理门禁
 
 ```powershell
 python scripts/check_doc_coverage.py --base main
@@ -92,65 +83,50 @@ python scripts/check_code_style.py --base main
 python -m pytest backend/tests/test_code_style.py -q
 ```
 
-## 6. Real-model end-to-end run (added 2026-10-15, this pass)
+## 7. 真实模型端到端运行（2026-10-15）
 
-One functional run was executed with a real OpenAI-compatible model
-(`deepseek-v4-flash-0731`) against a **dedicated demo SQLite database**, driven
-through the browser UI:
+使用真实 OpenAI 兼容模型（`deepseek-v4-flash-0731`）与**独立演示 SQLite 数据库**，通过浏览器 UI 完成一次功能运行：
 
 ```
-topic input -> A/B outline (real model) -> outline B selected
--> draft generation (real model, 1301 words) -> draft archived
--> POST /api/drafts/{id}/feedback/evolve -> Thinking DNA trait persisted
--> GET /api/dna/profile returns the new trait
+选题输入 -> A/B 大纲（真实模型）-> 选择大纲 B
+-> 初稿生成（真实模型，1301 字）-> 初稿归档
+-> POST /api/drafts/{id}/feedback/evolve -> 思维 DNA 特质持久化
+-> GET /api/dna/profile 返回新增特质
 ```
 
-What this proves: the wired pipeline executes end to end with a real model and
-that a `feedback/evolve` judgment mutates the stored profile.
+**能证明**：接线的流水线可端到端执行；一个 `feedback/evolve` 判断会改变存储的画像。
 
-What this does **not** prove:
+**不能证明**：
 
-- Answer/draft quality, hallucination rate, consistency across runs (n = 1).
-- Latency, token cost, throughput.
-- The full "human edits the article, `diff_agent` compares both revisions" path
-  (only mocked in tests).
-- Behaviour on real PostgreSQL.
-- Skill execution under the restricted-token sandbox.
-- Any multi-user / auth-isolation behaviour in this run (`AUTH_REQUIRED=false`).
+- 答案 / 初稿质量、幻觉率、多次运行一致性（n = 1）。
+- 延迟、token 成本、吞吐。
+- 「人工编辑全文 → `diff_agent` 双版本比对」的完整路径（仅 Mock）。
+- 真实 PostgreSQL 下的行为。
+- 受限令牌沙盒下的 Skill 执行。
+- 本次运行的任何多用户 / 鉴权隔离行为（`AUTH_REQUIRED=false`）。
 
-Screenshots 01-03 in `README.md` come from this run and contain real model
-output for synthetic input. The demo database and service logs were deleted
-after the capture; the draft id above is not a business metric.
+`README.md` 中的截图 01-03 来自本次运行，输入为合成数据。演示数据库与服务日志在采集后已删除；上述草稿 id 不是业务指标。
 
-## 7. Export verification run (independent public copy)
+## 8. 展示副本的独立验证运行
 
-Executed inside the standalone export directory
-(`Personal-IP-Agent-Showcase`), with the project's own virtualenv interpreter and
-no network credentials:
+在独立导出目录（`Personal-IP-Agent-Showcase`）中，使用项目自身虚拟环境解释器、无网络凭据执行：
 
 ```powershell
 python -m pytest -q --no-header -p no:cacheprovider
 ```
 
-Result:
+结果：
 
-- passed: 992
-- skipped: 3
-- failed: 18
-- warnings: 97
+- 通过：992
+- 跳过：3
+- 失败：18
+- 警告：97
 
-The 18 failures are **not** hidden or reclassified. They fall into the categories
-already declared as broken/partial in `README.md` and `docs/feature-status.md`:
+这 18 个失败**未被隐藏或重新分类**，均属于 `README.md` 与 `docs/feature-status.md` 中已声明为损坏 / 部分实现的类别：
 
-1. `skills/content-multi-distributor` platform formatters raise `NameError`
-   (`test_blueprint_creation_and_distribution.py`).
-2. Viewpoint-conflict detection raises `NameError`
-   (`test_dna_conflict_and_management.py::test_viewpoint_conflict_detection`).
-3. `test_api_routes.py::test_generate_draft_error_handling` raises `NameError`.
-4. `tests/test_api_auth_surface.py::test_public_endpoint_registry_matches_application`
-   fails and was not triaged in this pass.
+1. `skills/content-multi-distributor` 平台排版 `NameError`（`test_blueprint_creation_and_distribution.py`）。
+2. 观点冲突检测 `NameError`（`test_dna_conflict_and_management.py::test_viewpoint_conflict_detection`）。
+3. `test_api_routes.py::test_generate_draft_error_handling` `NameError`。
+4. `tests/test_api_auth_surface.py::test_public_endpoint_registry_matches_application` 失败，本轮未进一步定位。
 
-This pass added no business functionality and did not modify source to make the
-suite green. Governance gates (`scripts/check_code_style.py`,
-`scripts/check_doc_coverage.py`) were run in the original worktree and passed
-there; the export copy is a subset snapshot and is not the gated worktree.
+本轮未新增任何业务功能，也未修改源码让测试变绿。治理门禁（`scripts/check_code_style.py`、`scripts/check_doc_coverage.py`）在**原始工作树**中运行并通过；导出副本是子集快照，不是受门禁保护的工作树。
