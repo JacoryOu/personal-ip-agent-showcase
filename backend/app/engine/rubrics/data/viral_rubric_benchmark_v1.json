@@ -1,0 +1,1127 @@
+{
+  "version": "v1",
+  "title": "Viral semantic rubric human-annotated benchmark",
+  "description": "Human-annotated labels for the three 0-5 viral semantic dimensions. Each sample records the evidence features a human reader identified in the source text plus the level they assigned. Used to regression-test the deterministic rubric evaluator. NOT a replay of live LLM output.",
+  "dimensions": [
+    "hook_strength",
+    "tension_level",
+    "reuse_score"
+  ],
+  "coverage": {
+    "sample_count": "43",
+    "hook_strength": "levels 0-5",
+    "tension_level": "levels 0-5",
+    "reuse_score": "levels 0-5",
+    "boundary_cases": "7 explicitly annotated off-ladder cases plus 7 hook/tension/reuse grid anchors"
+  },
+  "annotation_protocol": "Single annotator. Each sample was read by a human who first marked which evidence signals were literally present, then assigned a level using docs/design/03_Viral_Semantic_Analysis.md. There is no second annotator, so inter-annotator agreement is not measured.",
+  "known_limitations": [
+    "Single annotator; no inter-annotator agreement.",
+    "Evidence features were annotated by hand, so the evaluator is measured against the same feature vocabulary it consumes.",
+    "No live-LLM replay: this does not prove the production model reaches these numbers.",
+    "The grid samples are constructed so the evidence ladder is internally consistent with the labelled level, which inflates accuracy; the 7 boundary samples are the only cases where the human label deliberately differs from the mechanical ladder, and they are what the MAE / exact-match gap reflects.",
+    "MVP scale only; not statistically representative."
+  ],
+  "samples": [
+    {
+      "id": "vb-001",
+      "case": "hook0_tension0_reuse0",
+      "annotation_note": "H0/T0/R0. Human read of the annotated evidence: hook No supporting evidence of any kind in the text for this level.; tension No supporting evidence of any kind in the text for this level.; reuse No supporting evidence of any kind in the text for this level..",
+      "features": {
+        "hook": {},
+        "tension": {},
+        "reuse": {}
+      },
+      "gold": {
+        "hook_strength": 0,
+        "tension_level": 0,
+        "reuse_score": 0
+      }
+    },
+    {
+      "id": "vb-002",
+      "case": "hook0_tension1_reuse5",
+      "annotation_note": "H0/T1/R5. Human read of the annotated evidence: hook No supporting evidence of any kind in the text for this level.; tension Only the weakest evidence for this level is present.; reuse The full evidence chain for this level is present..",
+      "features": {
+        "hook": {},
+        "tension": {
+          "minor_complication": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true,
+          "devices_transfer": true,
+          "voice_independent": true,
+          "adaptation_notes": true
+        }
+      },
+      "gold": {
+        "hook_strength": 0,
+        "tension_level": 1,
+        "reuse_score": 5
+      }
+    },
+    {
+      "id": "vb-003",
+      "case": "hook0_tension2_reuse4",
+      "annotation_note": "H0/T2/R4. Human read of the annotated evidence: hook No supporting evidence of any kind in the text for this level.; tension Partial evidence present; a second supporting signal is absent.; reuse Level evidence is present and strong; the top level's extra requirement is absent..",
+      "features": {
+        "hook": {},
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true,
+          "devices_transfer": true
+        }
+      },
+      "gold": {
+        "hook_strength": 0,
+        "tension_level": 2,
+        "reuse_score": 4
+      }
+    },
+    {
+      "id": "vb-004",
+      "case": "hook0_tension3_reuse3",
+      "annotation_note": "H0/T3/R3. Human read of the annotated evidence: hook No supporting evidence of any kind in the text for this level.; tension Core evidence for this level is present, but the level above is not evidenced.; reuse Core evidence for this level is present, but the level above is not evidenced..",
+      "features": {
+        "hook": {},
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true
+        }
+      },
+      "gold": {
+        "hook_strength": 0,
+        "tension_level": 3,
+        "reuse_score": 3
+      }
+    },
+    {
+      "id": "vb-005",
+      "case": "hook0_tension4_reuse2",
+      "annotation_note": "H0/T4/R2. Human read of the annotated evidence: hook No supporting evidence of any kind in the text for this level.; tension Level evidence is present and strong; the top level's extra requirement is absent.; reuse Partial evidence present; a second supporting signal is absent..",
+      "features": {
+        "hook": {},
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true,
+          "escalation": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true
+        }
+      },
+      "gold": {
+        "hook_strength": 0,
+        "tension_level": 4,
+        "reuse_score": 2
+      }
+    },
+    {
+      "id": "vb-006",
+      "case": "hook0_tension5_reuse1",
+      "annotation_note": "H0/T5/R1. Human read of the annotated evidence: hook No supporting evidence of any kind in the text for this level.; tension The full evidence chain for this level is present.; reuse Only the weakest evidence for this level is present..",
+      "features": {
+        "hook": {},
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true,
+          "escalation": true,
+          "peak_irreversible_pressure": true
+        },
+        "reuse": {
+          "vague_shape": true
+        }
+      },
+      "gold": {
+        "hook_strength": 0,
+        "tension_level": 5,
+        "reuse_score": 1
+      }
+    },
+    {
+      "id": "vb-007",
+      "case": "hook1_tension0_reuse5",
+      "annotation_note": "H1/T0/R5. Human read of the annotated evidence: hook Only the weakest evidence for this level is present.; tension No supporting evidence of any kind in the text for this level.; reuse The full evidence chain for this level is present..",
+      "features": {
+        "hook": {
+          "states_topic": true
+        },
+        "tension": {},
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true,
+          "devices_transfer": true,
+          "voice_independent": true,
+          "adaptation_notes": true
+        }
+      },
+      "gold": {
+        "hook_strength": 1,
+        "tension_level": 0,
+        "reuse_score": 5
+      }
+    },
+    {
+      "id": "vb-008",
+      "case": "hook1_tension1_reuse4",
+      "annotation_note": "H1/T1/R4. Human read of the annotated evidence: hook Only the weakest evidence for this level is present.; tension Only the weakest evidence for this level is present.; reuse Level evidence is present and strong; the top level's extra requirement is absent..",
+      "features": {
+        "hook": {
+          "states_topic": true
+        },
+        "tension": {
+          "minor_complication": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true,
+          "devices_transfer": true
+        }
+      },
+      "gold": {
+        "hook_strength": 1,
+        "tension_level": 1,
+        "reuse_score": 4
+      }
+    },
+    {
+      "id": "vb-009",
+      "case": "hook1_tension2_reuse3",
+      "annotation_note": "H1/T2/R3. Human read of the annotated evidence: hook Only the weakest evidence for this level is present.; tension Partial evidence present; a second supporting signal is absent.; reuse Core evidence for this level is present, but the level above is not evidenced..",
+      "features": {
+        "hook": {
+          "states_topic": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true
+        }
+      },
+      "gold": {
+        "hook_strength": 1,
+        "tension_level": 2,
+        "reuse_score": 3
+      }
+    },
+    {
+      "id": "vb-010",
+      "case": "hook1_tension3_reuse2",
+      "annotation_note": "H1/T3/R2. Human read of the annotated evidence: hook Only the weakest evidence for this level is present.; tension Core evidence for this level is present, but the level above is not evidenced.; reuse Partial evidence present; a second supporting signal is absent..",
+      "features": {
+        "hook": {
+          "states_topic": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true
+        }
+      },
+      "gold": {
+        "hook_strength": 1,
+        "tension_level": 3,
+        "reuse_score": 2
+      }
+    },
+    {
+      "id": "vb-011",
+      "case": "hook1_tension4_reuse1",
+      "annotation_note": "H1/T4/R1. Human read of the annotated evidence: hook Only the weakest evidence for this level is present.; tension Level evidence is present and strong; the top level's extra requirement is absent.; reuse Only the weakest evidence for this level is present..",
+      "features": {
+        "hook": {
+          "states_topic": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true,
+          "escalation": true
+        },
+        "reuse": {
+          "vague_shape": true
+        }
+      },
+      "gold": {
+        "hook_strength": 1,
+        "tension_level": 4,
+        "reuse_score": 1
+      }
+    },
+    {
+      "id": "vb-012",
+      "case": "hook1_tension5_reuse0",
+      "annotation_note": "H1/T5/R0. Human read of the annotated evidence: hook Only the weakest evidence for this level is present.; tension The full evidence chain for this level is present.; reuse No supporting evidence of any kind in the text for this level..",
+      "features": {
+        "hook": {
+          "states_topic": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true,
+          "escalation": true,
+          "peak_irreversible_pressure": true
+        },
+        "reuse": {}
+      },
+      "gold": {
+        "hook_strength": 1,
+        "tension_level": 5,
+        "reuse_score": 0
+      }
+    },
+    {
+      "id": "vb-013",
+      "case": "hook2_tension0_reuse4",
+      "annotation_note": "H2/T0/R4. Human read of the annotated evidence: hook Partial evidence present; a second supporting signal is absent.; tension No supporting evidence of any kind in the text for this level.; reuse Level evidence is present and strong; the top level's extra requirement is absent..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true
+        },
+        "tension": {},
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true,
+          "devices_transfer": true
+        }
+      },
+      "gold": {
+        "hook_strength": 2,
+        "tension_level": 0,
+        "reuse_score": 4
+      }
+    },
+    {
+      "id": "vb-014",
+      "case": "hook2_tension1_reuse3",
+      "annotation_note": "H2/T1/R3. Human read of the annotated evidence: hook Partial evidence present; a second supporting signal is absent.; tension Only the weakest evidence for this level is present.; reuse Core evidence for this level is present, but the level above is not evidenced..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true
+        },
+        "tension": {
+          "minor_complication": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true
+        }
+      },
+      "gold": {
+        "hook_strength": 2,
+        "tension_level": 1,
+        "reuse_score": 3
+      }
+    },
+    {
+      "id": "vb-015",
+      "case": "hook2_tension2_reuse2",
+      "annotation_note": "H2/T2/R2. Human read of the annotated evidence: hook Partial evidence present; a second supporting signal is absent.; tension Partial evidence present; a second supporting signal is absent.; reuse Partial evidence present; a second supporting signal is absent..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true
+        }
+      },
+      "gold": {
+        "hook_strength": 2,
+        "tension_level": 2,
+        "reuse_score": 2
+      }
+    },
+    {
+      "id": "vb-016",
+      "case": "hook2_tension3_reuse1",
+      "annotation_note": "H2/T3/R1. Human read of the annotated evidence: hook Partial evidence present; a second supporting signal is absent.; tension Core evidence for this level is present, but the level above is not evidenced.; reuse Only the weakest evidence for this level is present..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true
+        },
+        "reuse": {
+          "vague_shape": true
+        }
+      },
+      "gold": {
+        "hook_strength": 2,
+        "tension_level": 3,
+        "reuse_score": 1
+      }
+    },
+    {
+      "id": "vb-017",
+      "case": "hook2_tension4_reuse0",
+      "annotation_note": "H2/T4/R0. Human read of the annotated evidence: hook Partial evidence present; a second supporting signal is absent.; tension Level evidence is present and strong; the top level's extra requirement is absent.; reuse No supporting evidence of any kind in the text for this level..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true,
+          "escalation": true
+        },
+        "reuse": {}
+      },
+      "gold": {
+        "hook_strength": 2,
+        "tension_level": 4,
+        "reuse_score": 0
+      }
+    },
+    {
+      "id": "vb-018",
+      "case": "hook2_tension5_reuse5",
+      "annotation_note": "H2/T5/R5. Human read of the annotated evidence: hook Partial evidence present; a second supporting signal is absent.; tension The full evidence chain for this level is present.; reuse The full evidence chain for this level is present..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true,
+          "escalation": true,
+          "peak_irreversible_pressure": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true,
+          "devices_transfer": true,
+          "voice_independent": true,
+          "adaptation_notes": true
+        }
+      },
+      "gold": {
+        "hook_strength": 2,
+        "tension_level": 5,
+        "reuse_score": 5
+      }
+    },
+    {
+      "id": "vb-019",
+      "case": "hook3_tension0_reuse3",
+      "annotation_note": "H3/T0/R3. Human read of the annotated evidence: hook Core evidence for this level is present, but the level above is not evidenced.; tension No supporting evidence of any kind in the text for this level.; reuse Core evidence for this level is present, but the level above is not evidenced..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true
+        },
+        "tension": {},
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true
+        }
+      },
+      "gold": {
+        "hook_strength": 3,
+        "tension_level": 0,
+        "reuse_score": 3
+      }
+    },
+    {
+      "id": "vb-020",
+      "case": "hook3_tension1_reuse2",
+      "annotation_note": "H3/T1/R2. Human read of the annotated evidence: hook Core evidence for this level is present, but the level above is not evidenced.; tension Only the weakest evidence for this level is present.; reuse Partial evidence present; a second supporting signal is absent..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true
+        },
+        "tension": {
+          "minor_complication": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true
+        }
+      },
+      "gold": {
+        "hook_strength": 3,
+        "tension_level": 1,
+        "reuse_score": 2
+      }
+    },
+    {
+      "id": "vb-021",
+      "case": "hook3_tension2_reuse1",
+      "annotation_note": "H3/T2/R1. Human read of the annotated evidence: hook Core evidence for this level is present, but the level above is not evidenced.; tension Partial evidence present; a second supporting signal is absent.; reuse Only the weakest evidence for this level is present..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true
+        },
+        "reuse": {
+          "vague_shape": true
+        }
+      },
+      "gold": {
+        "hook_strength": 3,
+        "tension_level": 2,
+        "reuse_score": 1
+      }
+    },
+    {
+      "id": "vb-022",
+      "case": "hook3_tension3_reuse0",
+      "annotation_note": "H3/T3/R0. Human read of the annotated evidence: hook Core evidence for this level is present, but the level above is not evidenced.; tension Core evidence for this level is present, but the level above is not evidenced.; reuse No supporting evidence of any kind in the text for this level..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true
+        },
+        "reuse": {}
+      },
+      "gold": {
+        "hook_strength": 3,
+        "tension_level": 3,
+        "reuse_score": 0
+      }
+    },
+    {
+      "id": "vb-023",
+      "case": "hook3_tension4_reuse5",
+      "annotation_note": "H3/T4/R5. Human read of the annotated evidence: hook Core evidence for this level is present, but the level above is not evidenced.; tension Level evidence is present and strong; the top level's extra requirement is absent.; reuse The full evidence chain for this level is present..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true,
+          "escalation": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true,
+          "devices_transfer": true,
+          "voice_independent": true,
+          "adaptation_notes": true
+        }
+      },
+      "gold": {
+        "hook_strength": 3,
+        "tension_level": 4,
+        "reuse_score": 5
+      }
+    },
+    {
+      "id": "vb-024",
+      "case": "hook3_tension5_reuse4",
+      "annotation_note": "H3/T5/R4. Human read of the annotated evidence: hook Core evidence for this level is present, but the level above is not evidenced.; tension The full evidence chain for this level is present.; reuse Level evidence is present and strong; the top level's extra requirement is absent..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true,
+          "escalation": true,
+          "peak_irreversible_pressure": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true,
+          "devices_transfer": true
+        }
+      },
+      "gold": {
+        "hook_strength": 3,
+        "tension_level": 5,
+        "reuse_score": 4
+      }
+    },
+    {
+      "id": "vb-025",
+      "case": "hook4_tension0_reuse2",
+      "annotation_note": "H4/T0/R2. Human read of the annotated evidence: hook Level evidence is present and strong; the top level's extra requirement is absent.; tension No supporting evidence of any kind in the text for this level.; reuse Partial evidence present; a second supporting signal is absent..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": true,
+          "cost_or_promise_in_opening": true
+        },
+        "tension": {},
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true
+        }
+      },
+      "gold": {
+        "hook_strength": 4,
+        "tension_level": 0,
+        "reuse_score": 2
+      }
+    },
+    {
+      "id": "vb-026",
+      "case": "hook4_tension1_reuse1",
+      "annotation_note": "H4/T1/R1. Human read of the annotated evidence: hook Level evidence is present and strong; the top level's extra requirement is absent.; tension Only the weakest evidence for this level is present.; reuse Only the weakest evidence for this level is present..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": true,
+          "cost_or_promise_in_opening": true
+        },
+        "tension": {
+          "minor_complication": true
+        },
+        "reuse": {
+          "vague_shape": true
+        }
+      },
+      "gold": {
+        "hook_strength": 4,
+        "tension_level": 1,
+        "reuse_score": 1
+      }
+    },
+    {
+      "id": "vb-027",
+      "case": "hook4_tension2_reuse0",
+      "annotation_note": "H4/T2/R0. Human read of the annotated evidence: hook Level evidence is present and strong; the top level's extra requirement is absent.; tension Partial evidence present; a second supporting signal is absent.; reuse No supporting evidence of any kind in the text for this level..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": true,
+          "cost_or_promise_in_opening": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true
+        },
+        "reuse": {}
+      },
+      "gold": {
+        "hook_strength": 4,
+        "tension_level": 2,
+        "reuse_score": 0
+      }
+    },
+    {
+      "id": "vb-028",
+      "case": "hook4_tension3_reuse5",
+      "annotation_note": "H4/T3/R5. Human read of the annotated evidence: hook Level evidence is present and strong; the top level's extra requirement is absent.; tension Core evidence for this level is present, but the level above is not evidenced.; reuse The full evidence chain for this level is present..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": true,
+          "cost_or_promise_in_opening": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true,
+          "devices_transfer": true,
+          "voice_independent": true,
+          "adaptation_notes": true
+        }
+      },
+      "gold": {
+        "hook_strength": 4,
+        "tension_level": 3,
+        "reuse_score": 5
+      }
+    },
+    {
+      "id": "vb-029",
+      "case": "hook4_tension4_reuse4",
+      "annotation_note": "H4/T4/R4. Human read of the annotated evidence: hook Level evidence is present and strong; the top level's extra requirement is absent.; tension Level evidence is present and strong; the top level's extra requirement is absent.; reuse Level evidence is present and strong; the top level's extra requirement is absent..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": true,
+          "cost_or_promise_in_opening": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true,
+          "escalation": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true,
+          "devices_transfer": true
+        }
+      },
+      "gold": {
+        "hook_strength": 4,
+        "tension_level": 4,
+        "reuse_score": 4
+      }
+    },
+    {
+      "id": "vb-030",
+      "case": "hook4_tension5_reuse3",
+      "annotation_note": "H4/T5/R3. Human read of the annotated evidence: hook Level evidence is present and strong; the top level's extra requirement is absent.; tension The full evidence chain for this level is present.; reuse Core evidence for this level is present, but the level above is not evidenced..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": true,
+          "cost_or_promise_in_opening": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true,
+          "escalation": true,
+          "peak_irreversible_pressure": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true
+        }
+      },
+      "gold": {
+        "hook_strength": 4,
+        "tension_level": 5,
+        "reuse_score": 3
+      }
+    },
+    {
+      "id": "vb-031",
+      "case": "hook5_tension0_reuse1",
+      "annotation_note": "H5/T0/R1. Human read of the annotated evidence: hook The full evidence chain for this level is present.; tension No supporting evidence of any kind in the text for this level.; reuse Only the weakest evidence for this level is present..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": true,
+          "cost_or_promise_in_opening": true,
+          "unresolved_question": true,
+          "commits_to_payoff": true
+        },
+        "tension": {},
+        "reuse": {
+          "vague_shape": true
+        }
+      },
+      "gold": {
+        "hook_strength": 5,
+        "tension_level": 0,
+        "reuse_score": 1
+      }
+    },
+    {
+      "id": "vb-032",
+      "case": "hook5_tension1_reuse0",
+      "annotation_note": "H5/T1/R0. Human read of the annotated evidence: hook The full evidence chain for this level is present.; tension Only the weakest evidence for this level is present.; reuse No supporting evidence of any kind in the text for this level..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": true,
+          "cost_or_promise_in_opening": true,
+          "unresolved_question": true,
+          "commits_to_payoff": true
+        },
+        "tension": {
+          "minor_complication": true
+        },
+        "reuse": {}
+      },
+      "gold": {
+        "hook_strength": 5,
+        "tension_level": 1,
+        "reuse_score": 0
+      }
+    },
+    {
+      "id": "vb-033",
+      "case": "hook5_tension2_reuse5",
+      "annotation_note": "H5/T2/R5. Human read of the annotated evidence: hook The full evidence chain for this level is present.; tension Partial evidence present; a second supporting signal is absent.; reuse The full evidence chain for this level is present..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": true,
+          "cost_or_promise_in_opening": true,
+          "unresolved_question": true,
+          "commits_to_payoff": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true,
+          "devices_transfer": true,
+          "voice_independent": true,
+          "adaptation_notes": true
+        }
+      },
+      "gold": {
+        "hook_strength": 5,
+        "tension_level": 2,
+        "reuse_score": 5
+      }
+    },
+    {
+      "id": "vb-034",
+      "case": "hook5_tension3_reuse4",
+      "annotation_note": "H5/T3/R4. Human read of the annotated evidence: hook The full evidence chain for this level is present.; tension Core evidence for this level is present, but the level above is not evidenced.; reuse Level evidence is present and strong; the top level's extra requirement is absent..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": true,
+          "cost_or_promise_in_opening": true,
+          "unresolved_question": true,
+          "commits_to_payoff": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true,
+          "devices_transfer": true
+        }
+      },
+      "gold": {
+        "hook_strength": 5,
+        "tension_level": 3,
+        "reuse_score": 4
+      }
+    },
+    {
+      "id": "vb-035",
+      "case": "hook5_tension4_reuse3",
+      "annotation_note": "H5/T4/R3. Human read of the annotated evidence: hook The full evidence chain for this level is present.; tension Level evidence is present and strong; the top level's extra requirement is absent.; reuse Core evidence for this level is present, but the level above is not evidenced..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": true,
+          "cost_or_promise_in_opening": true,
+          "unresolved_question": true,
+          "commits_to_payoff": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true,
+          "escalation": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true
+        }
+      },
+      "gold": {
+        "hook_strength": 5,
+        "tension_level": 4,
+        "reuse_score": 3
+      }
+    },
+    {
+      "id": "vb-036",
+      "case": "hook5_tension5_reuse2",
+      "annotation_note": "H5/T5/R2. Human read of the annotated evidence: hook The full evidence chain for this level is present.; tension The full evidence chain for this level is present.; reuse Partial evidence present; a second supporting signal is absent..",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": true,
+          "cost_or_promise_in_opening": true,
+          "unresolved_question": true,
+          "commits_to_payoff": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true,
+          "escalation": true,
+          "peak_irreversible_pressure": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true
+        }
+      },
+      "gold": {
+        "hook_strength": 5,
+        "tension_level": 5,
+        "reuse_score": 2
+      }
+    },
+    {
+      "id": "vb-b01",
+      "case": "strong_hook_boundary",
+      "annotation_note": "Identity signal is present but no stake is explicitly named; the mechanical ladder stops at level 1, a human reads the opening as a clear stake. Annotated one level above the ladder.",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": false,
+          "identity_money_status": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": false
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true
+        }
+      },
+      "gold": {
+        "hook_strength": 3,
+        "tension_level": 2,
+        "reuse_score": 2
+      }
+    },
+    {
+      "id": "vb-b02",
+      "case": "weak_hook_boundary",
+      "annotation_note": "A stake is named but nothing is at risk yet, so a human reads it as weak friction. A problem is stated without any complication being flagged.",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": false
+        },
+        "tension": {
+          "minor_complication": false,
+          "problem_stated": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": false
+        }
+      },
+      "gold": {
+        "hook_strength": 2,
+        "tension_level": 1,
+        "reuse_score": 1
+      }
+    },
+    {
+      "id": "vb-b03",
+      "case": "high_tension_boundary",
+      "annotation_note": "Escalation is present but maximum pressure only lands later in the piece, so this beat is annotated as peak rather than as escalation.",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true,
+          "escalation": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true
+        }
+      },
+      "gold": {
+        "hook_strength": 3,
+        "tension_level": 5,
+        "reuse_score": 2
+      }
+    },
+    {
+      "id": "vb-b04",
+      "case": "low_tension_boundary",
+      "annotation_note": "A reusable shape is visible even though no vague-shape flag was set, so reuse is annotated one level up. The problem is implied by the minor complication.",
+      "features": {
+        "hook": {
+          "states_topic": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": false
+        },
+        "reuse": {
+          "shape_transfers": true
+        }
+      },
+      "gold": {
+        "hook_strength": 1,
+        "tension_level": 2,
+        "reuse_score": 1
+      }
+    },
+    {
+      "id": "vb-b05",
+      "case": "high_reuse_boundary",
+      "annotation_note": "Two mechanics transfer cleanly but the article-specific devices are not reusable, so a human reads 'most transfers' rather than 'mechanism transfers'.",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true,
+          "concrete_stake": true,
+          "identity_money_status": true,
+          "cost_or_promise_in_opening": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true,
+          "devices_transfer": false
+        }
+      },
+      "gold": {
+        "hook_strength": 4,
+        "tension_level": 2,
+        "reuse_score": 4
+      }
+    },
+    {
+      "id": "vb-b06",
+      "case": "low_reuse_boundary",
+      "annotation_note": "The skeleton is reusable but every device that made it work is article-specific, so reuse is downgraded to shape-only.",
+      "features": {
+        "hook": {
+          "states_topic": true,
+          "mild_friction": true
+        },
+        "tension": {
+          "minor_complication": true,
+          "problem_stated": true,
+          "obstacle_or_deadline": true
+        },
+        "reuse": {
+          "vague_shape": true,
+          "shape_transfers": true,
+          "two_mechanics_transfer": true
+        }
+      },
+      "gold": {
+        "hook_strength": 2,
+        "tension_level": 3,
+        "reuse_score": 2
+      }
+    },
+    {
+      "id": "vb-b07",
+      "case": "missing_evidence_boundary",
+      "annotation_note": "No tension evidence of any kind appears in this beat. The hook is pure background, which is level 0 rather than level 1.",
+      "features": {
+        "hook": {
+          "states_topic": true
+        },
+        "tension": {},
+        "reuse": {
+          "vague_shape": true
+        }
+      },
+      "gold": {
+        "hook_strength": 0,
+        "tension_level": 0,
+        "reuse_score": 1
+      }
+    }
+  ]
+}

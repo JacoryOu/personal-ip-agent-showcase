@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Node
+node_modules/
+
+# Secrets and local data
+.env
+.env.local
+*.db
+*.sqlite
+*.sqlite3
+backend/data/
+
+# Local artifacts
+screenshots/
+test_renders/
+test_*.html
+test_*.json
+
+# Test / coverage artifacts
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+*.log
+
+# Demo screenshots (captured locally, may contain personal data)
+docs/demo/screenshots/

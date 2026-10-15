@@ -1,0 +1,47 @@
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Node
+node_modules/
+dist/
+dist-ssr/
+*.local
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.coverage
+coverage.xml
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# Secrets and local data
+.env
+.env.local
+.env.*.local
+*.db
+*.sqlite
+*.sqlite3
+backend/data/
+*.pem
+*.key
+
+# Local artifacts
+screenshots/
+test_renders/
+test_*.html
+test_bundle.js
+test_bundle_iife.js
+
+# Editor / OS
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+*.sw?

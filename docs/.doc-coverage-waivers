@@ -1,0 +1,15 @@
+# Documentation coverage waivers
+#
+# Format (one per line):
+#     <path-or-glob> :: <reason why no doc update is needed>
+#
+# Use this ONLY when a change genuinely does not alter documented behaviour
+# (refactor, typo, test-only, generated file, pure internal rename).
+# If the change adds or alters a public surface, update the code-truth docs
+# instead of adding a waiver here.
+#
+# Examples:
+#   backend/app/services/__init__.py :: package init only, no public surface
+#   frontend/src/components/README.md :: documentation of components, not a component
+#
+# Lines starting with '#' and blank lines are ignored.

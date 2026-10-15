@@ -1,0 +1,43 @@
+# Code-style debt baseline.
+#
+# Each line: <relative path> <max allowed lines>
+#
+# Semantics (see docs/architecture/09_Coding_Standards.md S4):
+#   * Listed files are LEGACY debt with a frozen ceiling.
+#   * A listed file may shrink, never grow above its number.
+#   * Lowering a number is a manual edit in the same commit as the refactor.
+#   * Raising a ceiling requires a documented reason in
+#     docs/product/07_Task_Backlog_v0.1.md and reviewer approval.
+
+backend/app/services/memory_service.py 250
+backend/app/core/skill_engine/acl_guard.py 322
+backend/app/services/inspection_scheduler_service.py 219
+backend/app/api/chat_lounge.py 100
+backend/app/services/credential_service.py 984
+backend/app/engine/cognitive_engine.py 958
+backend/app/core/skill_engine/windows_sandbox.py 538
+backend/tests/test_workbench_full_ip_integration.py 819
+backend/app/api/drafts.py 47
+backend/app/api/private_domain.py 73
+backend/app/services/platform_crawler_service.py 40
+scripts/check_doc_coverage.py 502
+backend/tests/test_viral_style_draft.py 599
+backend/app/services/image_service.py 559
+backend/app/services/cognitive_service.py 48
+backend/tests/test_dna_v2_and_timeline.py 552
+backend/app/services/material_service.py 534
+backend/tests/test_security_private_surfaces.py 529
+backend/app/api/dna.py 86
+backend/tests/test_chat_lounge.py 514
+backend/app/schemas/draft_schemas.py 474
+backend/app/api/materials.py 46
+backend/app/services/playwright_service.py 432
+backend/app/core/net_guard.py 419
+backend/app/core/model_gateway.py 387
+backend/app/services/feedback_service.py 385
+backend/app/services/obsidian_service.py 373
+backend/app/schemas/viral_schemas.py 365
+backend/app/api/platforms.py 82
+backend/app/core/skill_engine/policy.py 359
+backend/app/services/viral_semantic_service.py 329
+backend/app/core/skill_engine/job_object.py 314
