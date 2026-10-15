@@ -275,6 +275,7 @@ def test_api_distribute_endpoint(client: TestClient):
     """Tests POST /api/drafts/distribute."""
     res = client.post(
         "/api/drafts/distribute",
+        headers=BP_AUTH,
         json={
             "content": "# 测试分发\n\n核心在于打造超级个体生产力。\n\n## 阶段一\n快速验证想法。\n\n## 阶段二\n多平台分发传播。",
             "title": "测试分发",
@@ -728,4 +729,3 @@ def test_xiaohongshu_card_budget_limits():
             assert len(item) <= 50, f"checklist item too long: {len(item)}"
     if sc.get("golden_quote"):
         assert len(sc["golden_quote"]) <= 70, f"golden_quote too long: {len(sc['golden_quote'])}"
-

@@ -2,7 +2,7 @@
 import uuid
 from typing import Any, Dict, List, Optional
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlmodel import Session
 
 from app.core.auth import AuthenticatedUser, get_current_user

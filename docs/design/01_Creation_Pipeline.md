@@ -217,3 +217,14 @@ Error handling:
   payloads or credentials.
 - The original exception is recorded server-side and correlated by request id;
   the client-visible `X-Request-ID` header matches the `request_id` in the body.
+
+## 2026-10-15 defect fix: `draft_generation.py` error handling
+
+`backend/app/api/draft_generation.py` uses `fastapi.status` in its
+`AppError(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, ...)` degradation path
+but did not import it. Because the name was only resolved at call time, every
+failure that hit the "upstream draft engine unavailable" branch raised
+`NameError` instead of returning the uniform 503 error envelope, which cascaded
+into several unrelated test failures. The fix adds
+`from fastapi import status`; behaviour is unchanged apart from the branch now
+returning the documented 503 envelope.

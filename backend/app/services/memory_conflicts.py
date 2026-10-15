@@ -7,7 +7,7 @@ import uuid
 from sqlmodel import Session
 
 from app.core.db import engine
-from app.domain.cognitive.models import TraitStatus
+from app.domain.cognitive.models import CognitiveTrait, TraitStatus
 from app.services.cognitive_service import CognitiveService
 
 def detect_viewpoint_conflicts(

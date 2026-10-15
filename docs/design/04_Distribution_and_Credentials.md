@@ -170,3 +170,13 @@ unchanged.
 
 Sandbox guarantees are unchanged; see
 docs/architecture/10_Sandbox_and_Permission_Model.md.
+
+## 2026-10-15 defect fix: formatter helper availability
+
+The formatter modules called `clean_title_text` and `extract_footnotes` without
+defining or importing them, so local formatting/preview for WeChat, Twitter,
+video and Xiaohongshu output failed at call time (`NameError`). `_formatters.py`
+now defines `clean_title_text` and `extract_footnotes`, and `_formatters_xhs.py`
+defines its own `clean_title_text`. This only restores local
+formatting/preview; multi-platform auto-publishing remains unimplemented and
+unverified against any real platform.

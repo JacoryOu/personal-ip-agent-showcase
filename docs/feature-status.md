@@ -14,14 +14,14 @@
 | --- | --- | --- | --- |
 | 1 | 发散 A/B 大纲生成 | A | `engine/agents/outline_agent.py`、`api/outlines.py`、`tests/test_outline_agent_mock.py` |
 | 2 | 带 IP 上下文的初稿生成 | A | `engine/agents/draft_agent.py`、`api/draft_generation.py` |
-| 3 | 初稿失败路径错误契约 | C | `api/draft_generation.py:68` 的 `status` NameError |
+| 3 | 初稿失败路径错误契约 | A | `api/draft_generation.py`（2026-10-15 补 `status` 导入） |
 | 4 | 初稿归档 + 血缘 | A | `api/draft_archive.py`、`api/draft_lineage.py`、`tests/test_drafts_archive_api.py` |
 | 5 | 初稿反馈 | A | `api/draft_feedback.py`、`tests/test_feedback_and_evolution.py` |
 | 6 | 基于差异的思维 DNA 提取 | A | `engine/agents/diff_agent.py`、`tests/test_diff_agent.py` |
 | 7 | 零差异基线门控（跳过 LLM） | A | `diff_agent.py`、`tests/test_diff_agent.py` |
 | 8 | DNA v2 + 时间线 + 取代 | A | `api/dna_v2*.py`、`tests/test_dna_v2_and_timeline.py` |
 | 9 | Persona 提取 / 认知访谈 | A | `api/dna_v2_persona_extract*.py`、`tests/test_persona_extraction_and_interview.py` |
-| 10 | 观点冲突检测 | C | `services/memory_conflicts.py:124` NameError |
+| 10 | 观点冲突检测 | A | `services/memory_conflicts.py`（2026-10-15 补 `CognitiveTrait` 导入） |
 | 11 | 闭环画像演化 | A | `services/cognitive_evolution_service.py`、`tests/test_closed_loop_and_profile.py` |
 | 12 | DNA 可移植（导出 / 导入） | A | `api/dna_portability.py`、`services/cognitive_portability_service.py` |
 | 13 | 初稿风格指纹选择 | A | `services/style_selection_service.py`、`tests/test_style_selection_service.py` |
@@ -51,7 +51,7 @@
 | 27 | 平台账号管理 | A | `services/platform_crawler_account_service.py`、`tests/test_platform_accounts_and_ingestion.py` |
 | 28 | 平台信息采集（爬虫） | B | `services/platform_crawler_*.py`、`tests/test_platform_accounts_and_ingestion.py`（无真实网络运行） |
 | 29 | 实时扫码登录 | B | `tests/test_live_qr_login.py`（需真实账号） |
-| 30 | 多平台排版（微信 / 小红书 / X / 短视频） | C | `skills/content-multi-distributor/scripts/_formatters*.py` NameError |
+| 30 | 多平台排版（微信 / 小红书 / X / 短视频） | A | `skills/content-multi-distributor/scripts/_formatters*.py`（2026-10-15 补 `clean_title_text` / `extract_footnotes`） |
 | 31 | 平台自动发布 | P | 无发布 API；仅排版 + 预览 |
 | 32 | 热点雷达 Skill | B | `skills/trending-radar/` |
 

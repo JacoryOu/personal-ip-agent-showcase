@@ -25,8 +25,8 @@
 | 爆款风格指纹分析（规则 + LLM） | 已实现 | `backend/app/api/viral_analysis.py` |
 | 基于规则的评分基准（43 条人工标注样本） | 已实现 | `backend/app/engine/rubrics/` |
 | 带受限令牌沙盒的 Skill 引擎 | 已实现（隔离有限） | `backend/app/core/skill_engine/` |
-| 微信 / 小红书 / X / 短视频排版 | **有缺陷**（NameError） | `skills/content-multi-distributor/scripts/_formatters*.py` |
-| 观点冲突检测 | **有缺陷**（NameError） | `backend/app/services/memory_conflicts.py` |
+| 微信 / 小红书 / X / 短视频排版 | 已实现（2026-10-15 修复缺失 helper 导入） | `skills/content-multi-distributor/scripts/_formatters*.py` |
+| 观点冲突检测 | 已实现（2026-10-15 修复缺失 import） | `backend/app/services/memory_conflicts.py` |
 | 微信聊天记录导入 | 未找到实现 | — |
 | 多平台自动发布（非仅排版） | 未实现 | — |
 | LoRA / QLoRA 微调训练 | 未实现 | — |
@@ -82,7 +82,7 @@ npm run dev      # http://localhost:5173
 ```
 
 - Swagger：http://localhost:8000/docs
-- 健康检查：http://localhost:8000/api/health（公开端点）
+- OpenAPI：http://localhost:8000/api/openapi.json（本项目没有 /api/health 路由）
 
 运行测试（无需凭据）：
 
@@ -122,7 +122,7 @@ cd backend
 | --- | --- | --- |
 | ![选题输入](docs/images/01-topic-input.png) | 工作台选题输入 | 选题作为流水线入口，发起真实 `POST /api/outlines/generate` |
 | ![发散大纲](docs/images/02-divergent-outlines.png) | A/B 发散大纲 | `OutlineAgent` 真实模型输出两版结构化大纲，并支持选择 |
-| ![初稿生成](docs/images/03-draft-generated.png) | 初稿编辑器 | `DraftAgent` 真实模型生成 1301 字初稿，含归档 / 排版 / DNA / 观点动作 |
+| ![初稿生成](docs/images/03-draft-generated.png) | 初稿编辑器 | `DraftAgent` 真实模型生成初稿（`metadata.word_count = 2908`），含归档 / 排版 / DNA / 观点动作 |
 
 模型：`deepseek-v4-flash-0731`（OpenAI 兼容端点）。完整复现步骤与结果见 [docs/demo.md](docs/demo.md)。
 
@@ -138,7 +138,7 @@ cd backend
 1. 这是**固定编排工作流**，不是自主规划 Agent：没有 planner、router、reflection、LLM tool calling，也没有 Agent 间协商。
 2. 沙盒隔离**部分实现**：真实受限令牌（`CreateRestrictedToken` + `CreateProcessAsUserW`），但**没有** AppContainer、文件系统 ACL 隔离、网络隔离，不启动 `WindowsSandbox.exe`，不完整执行 `SKILL.md` 的 `permissions` 策略；失败时按设计关闭而非静默降级。
 3. 数据库只读隔离**仅覆盖 Outline / Draft 的输入上下文装配**；初稿归档与 Diff/DNA/画像演化为有意可写。
-4. 多平台排版与观点冲突检测存在已知一行导入缺陷（`NameError`）；测试全量为 `992 passed / 18 failed / 3 skipped`，详见 [docs/evaluation.md](docs/evaluation.md)。
+4. 2026-10-15 修复了 5 处缺失 import / helper 定义（原为 17 项失败，过程 `17 → 12 → 0`）；当前全量测试 `1010 passed / 3 skipped`，详见 [docs/evaluation.md](docs/evaluation.md)。
 5. 多平台自动发布、微信聊天记录导入、LoRA/QLoRA 微调**均未实现**。
 6. 检索召回率、答案 / 初稿质量、延迟、成本、用户量、业务收益**全部未测**。
 

@@ -31,8 +31,8 @@ and what still needs confirmation.
 | Viral style-fingerprint analysis (rule-based + LLM) | implemented | `backend/app/engine/...viral`, `backend/app/api/viral_analysis.py` |
 | Rule-based rubric benchmark (43 labeled samples) | implemented | `backend/app/engine/rubrics/` |
 | Skill engine with restricted-token sandbox | implemented (partial isolation) | `backend/app/core/skill_engine/` |
-| WeChat / Xiaohongshu / X / short-video formatting | **broken** (NameError) | `skills/content-multi-distributor/scripts/_formatters*.py` |
-| Viewpoint-conflict detection | **broken** (NameError) | `backend/app/services/memory_conflicts.py` |
+| WeChat / Xiaohongshu / X / short-video formatting | Implemented (missing helper imports fixed 2026-10-15) | `skills/content-multi-distributor/scripts/_formatters*.py` |
+| Viewpoint-conflict detection | Implemented (missing import fixed 2026-10-15) | `backend/app/services/memory_conflicts.py` |
 | WeChat chat-record import | not found | — |
 | Multi-platform auto-publishing (not just formatting) | not implemented | — |
 | Fine-tuning (LoRA / QLoRA) training | not implemented | — |
@@ -93,7 +93,7 @@ npm run dev      # http://localhost:5173
 ```
 
 - Swagger: http://localhost:8000/docs
-- Health: http://localhost:8000/api/health (public endpoint)
+- OpenAPI: http://localhost:8000/api/openapi.json (this project has no /api/health route)
 
 Run the tests (no credentials needed):
 
@@ -167,7 +167,7 @@ mock-up. The topic text is synthetic.
 ### 3. Generated draft — `docs/images/03-draft-generated.png`
 
 - **Input:** outline **B**, selected in step 2.
-- **Output:** a full draft (1301 words in this run) archived through
+- **Output:** a full draft (`metadata.word_count = 2908` in this run) archived through
   `POST /api/drafts/generate`, shown in the draft editor together with the
   refinement-diff view, archive action, multi-platform reformat action,
   Thinking-DNA extraction action and the viewpoint review panel.
@@ -198,15 +198,12 @@ fine-tuning.
 - **Read-only DB covers the agent read path only.** Outline/Draft context
   assembly is physically read-only. Draft archiving and the Diff/DNA evolution
   flow are intentionally writable.
-- **Two features are currently broken** by an unresolved `NameError`:
-  viewpoint-conflict detection (`backend/app/services/memory_conflicts.py`) and
-  multi-platform distribution formatting
-  (`skills/content-multi-distributor/scripts/_formatters*.py`).
+- **Five missing imports / helper definitions were fixed on 2026-10-15**
+  (previously 17 failures; the fix path was 17 -> 12 -> 0). The full suite is
+  now `1010 passed / 3 skipped`; see `docs/evaluation.md`.
 - **WeChat chat-record import: not found in the repository.** Do not assume it
   exists.
-- **No multi-platform auto-publishing.** Only local formatting/preview, and that
-  path is currently broken anyway.
-- **No LoRA/QLoRA fine-tuning.** At most, an understanding of the principles.
+- **No multi-platform auto-publishing.** Only local formatting/preview.
 
 ## Scope of this public copy
 

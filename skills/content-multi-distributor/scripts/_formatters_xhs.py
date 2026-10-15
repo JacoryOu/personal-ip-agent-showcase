@@ -6,7 +6,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import re
 
-from _content import derive_hashtags, extract_key_sentences, parse_content_blocks
+from _content import (
+    clean_title_text,
+    derive_hashtags,
+    extract_key_sentences,
+    parse_content_blocks,
+)
 from _references import replace_links_with_footnotes
 
 def format_xiaohongshu(title: str, sections: list, golden_sentences: list):

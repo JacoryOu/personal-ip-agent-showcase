@@ -178,6 +178,14 @@ This is an internal refactor only:
   _core.py, _content.py, _references.py, _formatters.py, ...).
 - CLI flags, stdout JSON schema, exit codes, fallback behaviour and network
   access patterns are unchanged.
+- The distribution formatter modules
+  `skills/content-multi-distributor/scripts/_formatters.py` and
+  `skills/content-multi-distributor/scripts/_formatters_xhs.py` now import the
+  helpers they call (`clean_title_text`, and `extract_footnotes` in the shared
+  module). Before the fix these modules raised `NameError` at format time, which
+  is why local multi-platform formatting tests failed. The fix restores local
+  formatting and preview only; real platform publishing remains unimplemented and
+  unverified against live platforms.
 - Code style: new skill modules must stay under 300 lines (enforced by
   scripts/check_code_style.py); skill scripts are not baselined in
   scripts/code_style_baseline.txt.

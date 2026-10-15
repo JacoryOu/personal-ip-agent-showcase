@@ -6,9 +6,14 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import re
 
-from _content import derive_hashtags, extract_key_sentences, parse_content_blocks
+from _content import (
+    clean_title_text,
+    derive_hashtags,
+    extract_key_sentences,
+    parse_content_blocks,
+)
 from _formatters_xhs import format_xiaohongshu, generate_section_illustrations
-from _references import replace_links_with_footnotes
+from _references import extract_footnotes, replace_links_with_footnotes
 
 def format_wechat(title: str, sections: list, golden_sentences: list, raw_content: str = ""):
     clean_title = clean_title_text(title)

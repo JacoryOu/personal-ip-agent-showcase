@@ -63,7 +63,7 @@ split.
 | `memory_lifecycle.py` | Mem0 lifecycle application and user-work DNA ingestion | Implemented | 02 |
 | `memory_benchmarks.py` | Viral/benchmark decomposition ingestion and conversation conflict capture | Implemented | 02 |
 | `memory_blueprints.py` | Blueprint persistence / CRUD | Implemented | 02 |
-| `memory_conflicts.py` | Viewpoint conflict detection | Implemented | 02 |
+| `backend/app/services/memory_conflicts.py` | Viewpoint conflict detection; imports and persists the `CognitiveTrait` model when a conflict decision updates traits | Implemented | 02 |
 | `memory_context.py` | Context Thinking DNA assembly | Implemented | 02 |
 | `memory_retrieval.py` | Relevant-story retrieval (writable session path) | Implemented | 02 |
 | `memory_readonly.py` | `retrieve_relevant_stories_readonly` and the other `*_readonly` entry points used by the agent read path. Explicit read-only session is mandatory; there is **no** fallback to the writable engine and no default-user creation | Implemented | 02, `10_Sandbox_and_Permission_Model.md` |
@@ -212,8 +212,12 @@ changed.
 | `skills/content-multi-distributor/scripts/_content.py` | Title/content cleaning, block parsing, key sentences, hashtags |
 | `skills/content-multi-distributor/scripts/_markdown_links.py` | Markdown link / reference-definition parsing |
 | `skills/content-multi-distributor/scripts/_references.py` | Footnote extraction, link-to-footnote replacement |
-| `skills/content-multi-distributor/scripts/_formatters_xhs.py` | Xiaohongshu formatting, section illustrations |
-| `skills/content-multi-distributor/scripts/_formatters.py` | WeChat / Twitter / video formatting |
+| `skills/content-multi-distributor/scripts/_formatters_xhs.py` | Xiaohongshu formatting, section illustrations; defines `clean_title_text` |
+| `skills/content-multi-distributor/scripts/_formatters.py` | WeChat / Twitter / video formatting; defines `clean_title_text` and `extract_footnotes` |
+
+The `_formatters.py` / `_formatters_xhs.py` helper import fix only restores
+local formatting and preview; it does not mean any platform publish path is
+implemented or verified against a live platform.
 
 Splitting these files does **not** add any sandbox capability. Restricted-token
 execution remains Partial; see `10_Sandbox_and_Permission_Model.md`.

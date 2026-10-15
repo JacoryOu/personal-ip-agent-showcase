@@ -231,3 +231,12 @@ The split is internal only: the scheduler still calls `SkillManager.execute(...)
 the permission gate still runs before any workspace, token or child process is
 created, and the fail-closed rules listed in sections 4 and 6 are unchanged. See
 `docs/architecture/10_Sandbox_and_Permission_Model.md` for the full table.
+
+## 2026-10-15 defect fix: wheel-2 formatter helpers
+
+The wheel-2 (`content-multi-distributor`) formatter modules `_formatters.py` and
+`_formatters_xhs.py` called `clean_title_text` / `extract_footnotes` without
+defining or importing them, so any local formatting/preview run failed at call
+time with `NameError`. Both modules now define the helpers they use. No new
+sandbox guarantee, no new capability, and no real-platform publishing is implied:
+this only restores the local formatting/preview path.

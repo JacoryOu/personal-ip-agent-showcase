@@ -149,16 +149,32 @@ These are all traceable to code; pick the ones you can defend in an interview.
 
 ## 4. Verifiable results (state them exactly like this)
 
-- Local test suite, 2026-10-15, single process, no CI:
-  **18 failed, 992 passed, 3 skipped, 85 warnings**.
+- Real-model run, 2026-10-15, on the isolated demo database
+  `demo-data/job-demo.db`: topic -> divergent outlines A/B -> select outline ->
+  draft generation -> archive. Model `deepseek-v4-flash-0731`, draft id
+  `4a072bddea59432ca5f5a412118ee8ea`, title
+  "别急着"评估"AI工作流——先学会"听懂"它的身体语言",
+  `metadata.word_count = 2908`, raw draft Unicode length 3703 characters
+  (two different counting conventions - do not merge them), ~111 s.
+  - Screenshots `docs/images/01..03` come from this same run.
+  - Only the outline/draft part of the pipeline was verified with a real model
+    in this round; the human-edit -> diff/DNA path was not re-verified here and
+    is covered by automated tests only. This is a functional demo, not a
+    quality or performance evaluation.
+- Local test suite after the fixes, 2026-10-15, single process, no CI:
+  **1010 passed, 3 skipped, 86 warnings in 67.89s**.
+  - The older `992 passed / 18 failed / 3 skipped` figure was a historical local
+    snapshot, not a CI result. The first re-run of this round reproduced 17
+    failures, which were then fixed `17 -> 12 -> 0`.
+  - Root causes were five code defects: missing `clean_title_text` /
+    `extract_footnotes` in the multi-distributor formatters, a missing `status`
+    import in `draft_generation.py`, a missing `CognitiveTrait` import in
+    `memory_conflicts.py`, and integration tests that did not send an API key
+    header when auth was enabled (plus skill subprocess error wrapping).
   - This is a **mock-heavy, local, SQLite-default** run. It proves the harness
     and the contracts work. It is not a statement about model quality,
-    production readiness, or real-user behaviour.
-  - 18 failures are honest defects, three of them one-line import bugs
-    (`clean_title_text` in the multi-distributor formatters, `CognitiveTrait` in
-    `memory_conflicts.py`, `status` in `draft_generation.py`) plus one
-    sys.path issue in `test_api_auth_surface.py`. Details in
-    `docs/evaluation.md`.
+    production readiness, or real-user behaviour. Performance, latency, cost,
+    reliability and business outcomes are **unmeasured**.
 - Rule-based viral-rubric benchmark against 43 human-labeled samples
   (code thresholds: MAE <= 0.8, exact match >= 0.60).
   - Caveat you must understand before claiming it: it measures whether the
@@ -189,9 +205,10 @@ you confirm you wrote yourself.
    conventions into blocking checks instead of review comments.
 7. (role-honest variant, safe with what you confirmed) Owned requirements
    analysis and system design for the engine, reviewed the AI-assisted
-   implementation code, and validated the full content pipeline (outline ->
-   draft -> feedback -> DNA persistence) with a real model on a dedicated demo
-   database, capturing UI evidence for three core screens.
+   implementation code, and validated the topic -> outline -> draft part of the
+   content pipeline with a real model on a dedicated demo database, capturing UI
+   evidence for three core screens, then located and fixed missing imports and an
+   auth-related test defect to restore the full suite to 1010 passed / 3 skipped.
 
 Deliberately avoided in these bullets: "autonomous planning agent",
 "multi-agent collaboration", "complete sandbox", "multi-platform auto-publishing",
@@ -204,8 +221,9 @@ Deliberately avoided in these bullets: "autonomous planning agent",
   calling, and no inter-agent negotiation.
 - "Fine-tuned a model with LoRA/QLoRA" - not implemented. At most: understands
   LoRA/QLoRA principles and the basic workflow.
-- "Multi-platform content distribution" - currently only formatting/preview,
-  and it is currently broken by a missing import.
+- "Multi-platform auto-publishing" - not implemented. Only local
+  formatting/preview exists; its missing-helper defect is fixed and covered by
+  tests, but there is no real platform publishing verification.
 - "Sandboxed skill execution" without qualification - only a restricted token
   on Windows; no OS-level file or network isolation.
 - "Improved conversion rate by X%" or any business outcome - unmeasured.
@@ -213,7 +231,7 @@ Deliberately avoided in these bullets: "autonomous planning agent",
 ## 7. What you still need to supply (three items, in priority order)
 
 1. **Nothing blocking for the design/leadership framing.** Requirements analysis, system / architecture design, feature and engineering-rule management, code review and overall functional testing are all confirmed as yours, and the project is confirmed solo (see section 2). The only genuinely open items are narrower: whether you personally wrote any backend or frontend modules, whether you authored or only reviewed the test code, and whether you handled CI / deployment. Leaving these as "to be confirmed" is honest and costs you little, because the bullets you can defend already do not depend on them.
-2. **Real-run trace, if you want to show it.** One real-model end-to-end run with three UI screenshots now exists (`docs/demo.md`, `docs/images/`). It uses synthetic input on a throwaway SQLite file and is a functional demonstration only, not a quality or performance evaluation.
+2. **Real-run trace, if you want to show it.** One real-model outline/draft run with three UI screenshots now exists (`docs/demo.md`, `docs/images/`). It uses synthetic input on a throwaway SQLite file and is a functional demonstration only, not a quality or performance evaluation.
 3. **Environment and usage reality.** Whether it ever ran against real
    PostgreSQL, real outbound crawling, or real usage, and whether the 43 rubric
    labels are yours, a colleague's, or an external source. This determines which

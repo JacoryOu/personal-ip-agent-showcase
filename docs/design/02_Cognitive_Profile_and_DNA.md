@@ -202,3 +202,9 @@ The original exception is recorded server-side and correlated by request id; the
 client-visible `X-Request-ID` header matches the `request_id` in the response body.
 The exact sandbox and logging behaviour is specified in
 `docs/architecture/10_Sandbox_and_Permission_Model.md`.
+## 2026-10-15 defect fix: `memory_conflicts.py` import
+
+`backend/app/services/memory_conflicts.py` builds `CognitiveTrait` rows for
+viewpoint-conflict detection but never imported the model, so any path that
+actually persisted a detected conflict raised `NameError`. The fix imports
+`CognitiveTrait` from `app.models`; conflict-detection semantics are unchanged.

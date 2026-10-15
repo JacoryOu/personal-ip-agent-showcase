@@ -148,3 +148,12 @@ generated images, DB-backed per-user scheduler isolation, enforcement of
 
 Regression coverage: `backend/tests/test_api_auth_surface.py` and the local gate
 `scripts/check_api_auth.py` (see `13_Documentation_Governance.md`).
+
+## 9. Draft generation API module (code truth)
+
+The draft facade `backend/app/api/drafts.py` is split into responsibility
+modules. `backend/app/api/draft_generation.py` owns the outline/draft
+generation endpoints. It imports `status` from FastAPI and raises
+`status.HTTP_503_SERVICE_UNAVAILABLE` when the model gateway cannot serve a
+generation request, so the 503 contract is defined in code and covered by
+tests. No authentication or permission behaviour changed with this fix.

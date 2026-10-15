@@ -14,14 +14,14 @@ Legend:
 | --- | --- | --- | --- |
 | 1 | Divergent A/B outline generation | A | `engine/agents/outline_agent.py`, `api/outlines.py`, `tests/test_outline_agent_mock.py` |
 | 2 | Draft generation with IP context | A | `engine/agents/draft_agent.py`, `api/draft_generation.py` |
-| 3 | Draft failure-path error contract | C | `api/draft_generation.py:68` NameError on `status` |
+| 3 | Draft failure-path error contract | A | `api/draft_generation.py` (missing `status` import added 2026-10-15) |
 | 4 | Draft archive + lineage | A | `api/draft_archive.py`, `api/draft_lineage.py`, `tests/test_drafts_archive_api.py` |
 | 5 | Draft feedback | A | `api/draft_feedback.py`, `tests/test_feedback_and_evolution.py` |
 | 6 | Diff-based Thinking DNA extraction | A | `engine/agents/diff_agent.py`, `tests/test_diff_agent.py` |
 | 7 | Zero-diff baseline gate (skips LLM) | A | `diff_agent.py`, `tests/test_diff_agent.py` |
 | 8 | DNA v2 + timeline + supersede | A | `api/dna_v2*.py`, `tests/test_dna_v2_and_timeline.py` |
 | 9 | Persona extraction / cognitive interview | A | `api/dna_v2_persona_extract*.py`, `tests/test_persona_extraction_and_interview.py` |
-| 10 | Viewpoint-conflict detection | C | `services/memory_conflicts.py:124` NameError |
+| 10 | Viewpoint-conflict detection | A | `services/memory_conflicts.py` (missing `CognitiveTrait` import added 2026-10-15) |
 | 11 | Closed-loop profile evolution | A | `services/cognitive_evolution_service.py`, `tests/test_closed_loop_and_profile.py` |
 | 12 | DNA portability (export/import) | A | `api/dna_portability.py`, `services/cognitive_portability_service.py` |
 | 13 | Style fingerprint selection for drafts | A | `services/style_selection_service.py`, `tests/test_style_selection_service.py` |
@@ -51,7 +51,7 @@ Legend:
 | 27 | Platform account management | A | `services/platform_crawler_account_service.py`, `tests/test_platform_accounts_and_ingestion.py` |
 | 28 | Platform feed collection (crawler) | B | `services/platform_crawler_*.py`, `tests/test_platform_accounts_and_ingestion.py` (no live network run) |
 | 29 | Live QR login | B | `tests/test_live_qr_login.py` (needs a real account) |
-| 30 | Multi-platform formatting (wechat / xhs / x / short video) | C | `skills/content-multi-distributor/scripts/_formatters*.py` NameError |
+| 30 | Multi-platform formatting (wechat / xhs / x / short video) | A | `skills/content-multi-distributor/scripts/_formatters*.py` (`clean_title_text` / `extract_footnotes` added 2026-10-15) |
 | 31 | Automatic publishing to platforms | P | no publish API exists; only formatting + preview |
 | 32 | Trending radar skill | B | `skills/trending-radar/` |
 
